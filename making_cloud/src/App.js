@@ -1,16 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Main from "./component/Main/Main";
-import Map from "./component/Map/Map";
-import My from "./component/My/My";
-import Settings from "./component/Settings/Settings";
+import MainPage from "./pages/MainPage";
+import MapPage from "./pages/MapPage";
+import MyPage from "./pages/MyPage";
+import Settings from "./pages/SettingsPage";
 
 function App() {
   return (
       <Router>
         <Routes>
-          <Route exact path="/" element={<Main />} />
-          <Route path="/map" element={<Map />} />
-          <Route path="/my" element={<My />} />
+          <Route exact path="/" element={<MainPage />} />
+          <Route path="/map" element={<MapPage />} />
+          <Route path="/my" element={<MyPage />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </Router>

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { sendGetdRequest } from "../Hooks/sendGetdRequest";
-import PageWrapper from "../Wrapper/PageWrapper";
+import { sendGetdRequest } from "../component/Hooks/sendGetdRequest";
+import PageWrapper from "../component/Wrapper/PageWrapper";
 
-function Map() {
+
+function MapPage() {
   const [datas, setDatas] = useState(null);
   const [div, setDiv] = useState(<div>로딩중</div>)
 
@@ -37,4 +38,4 @@ function Map() {
   return <PageWrapper>{div}</PageWrapper>;
 }
 
-export default Map;
+export default MapPage;
