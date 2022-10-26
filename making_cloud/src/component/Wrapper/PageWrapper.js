@@ -13,7 +13,7 @@ function PageWrapper(props) {
 
 const minWidth = css`
   position: relative;
-  width: 390px;
+  // width: 390px;
   min-height: 600px;
   border: 1px solid black;
   margin: 0 auto;

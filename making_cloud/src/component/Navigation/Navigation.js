@@ -1,5 +1,4 @@
 import { css, cx } from "@emotion/css";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const NaviItems = ({ title, path, nowPath }) => {
