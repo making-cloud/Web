@@ -1,7 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
-import { getAnalytics } from "firebase/analytics";
+// import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
+// import { getAnalytics } from "firebase/analytics";
+import { getStorage, ref } from "firebase/storage";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -15,18 +16,20 @@ const firebaseConfig = {
   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_MEESAGING_SENDER_ID,
   appId: process.env.REACT_APP_APP_ID,
-  measurementId: process.env.REACT_APP_MEASUREMENT_ID
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const db = getFirestore(app);
+// const analytics = getAnalytics(app);
+// const db = getFirestore(app);
+export const storage = getStorage(app);
+export const storageRef = ref(storage);
 
 // Get a list of cities from your database
-async function getCities(db) {
-  const citiesCol = collection(db, 'cities');
-  const citySnapshot = await getDocs(citiesCol);
-  const cityList = citySnapshot.docs.map(doc => doc.data());
-  return cityList;
-}
+// async function getCities(db) {
+//   const citiesCol = collection(db, "cities");
+//   const citySnapshot = await getDocs(citiesCol);
+//   const cityList = citySnapshot.docs.map((doc) => doc.data());
+//   return cityList;
+// }
