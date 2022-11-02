@@ -1,18 +1,47 @@
 import React, { useEffect, useState } from "react";
 import { css } from "@emotion/css";
-import { storage } from "../../../Firebase/firebase";
+import { getComments, setComments, storage } from "../../../Firebase/firebase";
 import { v4 } from "uuid";
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 
-const imgesRef = ref(storage, "/images");
+const imagesRef = ref(storage, "/images");
 
-function UserRating(props) {
+function UserRating() {
   const [localFiles, setLocalFiles] = useState(null);
   const [firebaseImgRef, setFirebaseImgRef] = useState([]);
   const [evalImgsUrl, setEvalImgsUrl] = useState([]);
+  const [lastTextData, setLastTextData] = useState([]);
+  const [textValue, setTextValue] = useState("");
 
   useEffect(() => {
-    listAll(imgesRef).then((res) => {
+    getImage();
+    async function getCommentsValue() {
+      const commentsObj = await getComments();
+      const commentArr = commentsObj.map((commentObj) => commentObj.comments);
+      setLastTextData(...commentArr);
+    }
+    getCommentsValue();
+  }, []);
+
+  useEffect(() => {
+    if (firebaseImgRef.length === 0) return;
+    async function getUrl() {
+      const firebasePromise = firebaseImgRef.map((url) => getDownloadURL(url));
+      //  const firebasePromise = getDownloadURL(imagesRef); -> 한번에 불러오기 안되는 듯
+      const resultArray = await Promise.allSettled(firebasePromise);
+      setEvalImgsUrl(resultArray);
+    }
+    getUrl();
+  }, [firebaseImgRef]);
+
+  const handleLocalUpload = ({ target: { files } }) => {
+    setLocalFiles(files[0]);
+  };
+
+
+  function getImage()
+  {
+    listAll(imagesRef).then((res) => {
       res.prefixes.forEach((folderRef) => {
         // 폴더 ref
       });
@@ -20,36 +49,30 @@ function UserRating(props) {
       const nowImgRef = res.items.map((itemRef) => itemRef);
       setFirebaseImgRef([...nowImgRef]);
     });
-  }, []);
-
-  useEffect(() => {
-    if (firebaseImgRef.length === 0) return;
-    async function getUrl() {
-      
-       const firebasePromise = firebaseImgRef.map((url) => getDownloadURL(url));
-       const resultArray = await Promise.allSettled(firebasePromise);
-       setEvalImgsUrl(resultArray);
-    };
-    getUrl();
-  }, [firebaseImgRef]);
-
-
-
-
-
-  const handleLocalUpload = ({ target: { files } }) => {
-    setLocalFiles(files[0]);
-  };
+  }
 
   const submitImg = () => {
-    if (!localFiles) return;
-    const imageRef = ref(storage, `images/${localFiles.name + v4()}`);
-    uploadBytes(imageRef, localFiles).then(() => {
-      console.log("image upload!");
-    });
+    if (localFiles) {
+      const imageRef = ref(storage, `images/${localFiles.name + v4()}`);
+      uploadBytes(imageRef, localFiles).then(() => {
+        console.log("image upload!");
+        window.location.reload();
+      });
+      getImage();
+    }
+    if (textValue) {
+      const sendData = [...lastTextData, textValue];
+      setLastTextData(sendData);
+      setComments("heom", sendData);
+      setTextValue("");
+    }
   };
 
-  console.log(evalImgsUrl);
+  // console.log(getComments());
+
+  function handleTextChange(e) {
+    setTextValue(e.target.value);
+  }
 
   return (
     <div className={userEvalBox}>
@@ -72,6 +95,8 @@ function UserRating(props) {
         <textarea
           className={userEvalText}
           placeholder="user.name님의 의견은 어떠신가요?"
+          onChange={handleTextChange}
+          value={textValue}
         />
         <button className={evalAddButton} onClick={submitImg}>
           나의 후기 추가하기
@@ -84,6 +109,11 @@ function UserRating(props) {
           accept="image/png, image/jpeg, image/gif"
           onChange={handleLocalUpload}
         />
+      </div>
+      <div>
+        {lastTextData.map((data, i) => {
+          return <div key={i}>{data}</div>;
+        })}
       </div>
     </div>
   );

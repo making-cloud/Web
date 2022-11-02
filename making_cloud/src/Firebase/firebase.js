@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-// import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
+import { doc, setDoc, getFirestore, collection, getDocs, where, query } from "firebase/firestore";
 // import { getAnalytics } from "firebase/analytics";
 import { getStorage, ref } from "firebase/storage";
 
@@ -22,14 +22,19 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
-// const db = getFirestore(app);
+const db = getFirestore(app);
 export const storage = getStorage(app);
 export const storageRef = ref(storage);
 
 // Get a list of cities from your database
-// async function getCities(db) {
-//   const citiesCol = collection(db, "cities");
-//   const citySnapshot = await getDocs(citiesCol);
-//   const cityList = citySnapshot.docs.map((doc) => doc.data());
-//   return cityList;
-// }
+export async function getComments() {
+  const citiesCol = query(collection(db, "comments"), where('auth','==','heom'));
+  const citySnapshot = await getDocs(citiesCol);
+  const cityList = citySnapshot.docs.map((doc) => doc.data());
+  return cityList;
+}
+
+export async function setComments(commentsId, commentsValue) {
+  const comments = await setDoc(doc(db, "comments", commentsId), {auth: 'heom', 'comments': commentsValue});
+  console.log(comments);
+}
