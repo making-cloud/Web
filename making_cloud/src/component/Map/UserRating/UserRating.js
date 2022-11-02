@@ -4,39 +4,38 @@ import { storage } from "../../../Firebase/firebase";
 import { v4 } from "uuid";
 import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 
+const imgesRef = ref(storage, "/images");
+
 function UserRating(props) {
   const [localFiles, setLocalFiles] = useState(null);
   const [firebaseImgRef, setFirebaseImgRef] = useState([]);
   const [evalImgsUrl, setEvalImgsUrl] = useState([]);
 
-  const imgesRef = ref(storage, "/images");
-
   useEffect(() => {
-    console.log('한번');
-    pageImgList();
-  }, []);
-
-  async function pageImgList() {
-    if (!imgesRef) return;
     listAll(imgesRef).then((res) => {
       res.prefixes.forEach((folderRef) => {
         // 폴더 ref
       });
 
-      setFirebaseImgRef(res.items.map((itemRef) => itemRef))
+      const nowImgRef = res.items.map((itemRef) => itemRef);
+      setFirebaseImgRef([...nowImgRef]);
     });
-  }
+  }, []);
 
   useEffect(() => {
     if (firebaseImgRef.length === 0) return;
-
-    firebaseImgRef.map((imageRef) => {
-      getDownloadURL(imageRef).then((url) => {
-
-      });
-    });
-    setEvalImgsUrl()
+    async function getUrl() {
+      
+       const firebasePromise = firebaseImgRef.map((url) => getDownloadURL(url));
+       const resultArray = await Promise.allSettled(firebasePromise);
+       setEvalImgsUrl(resultArray);
+    };
+    getUrl();
   }, [firebaseImgRef]);
+
+
+
+
 
   const handleLocalUpload = ({ target: { files } }) => {
     setLocalFiles(files[0]);
@@ -51,21 +50,20 @@ function UserRating(props) {
   };
 
   console.log(evalImgsUrl);
-  
+
   return (
     <div className={userEvalBox}>
       <div>
         {evalImgsUrl &&
           evalImgsUrl.length > 0 &&
           evalImgsUrl.map((url) => {
-            console.log(url);
             return (
               <img
                 width={100}
                 height={100}
-                key={url}
+                key={url.value}
                 alt="eval img"
-                src={url}
+                src={url.value}
               />
             );
           })}

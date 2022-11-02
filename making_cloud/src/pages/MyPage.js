@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import PageWrapper from "../component/Wrapper/PageWrapper";
-import Calendar from "react-calendar";
-import moment from "moment";
 import { css } from "@emotion/css";
 import UserList from "./List";
+import Calendar from "react-calendar";
+import moment from "moment";
 
 export default function MyPage(props) {
   const [value, onChange] = useState(new Date()); //현재날짜
@@ -77,9 +77,9 @@ export default function MyPage(props) {
           />
           <button onClick={onCreate}>+</button>
           <UserList users={users} onRemove={onRemove} />
-          <Link to="/details">해당 장소 더 자세히 보기</Link>
         </div>
       )}
+      <Link to="/details">해당 장소 더 자세히 보기</Link>
     </PageWrapper>
   );
 }
