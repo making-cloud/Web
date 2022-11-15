@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import PageWrapper from "../component/Wrapper/PageWrapper";
@@ -204,3 +205,17 @@ const calendar = css`
     color: white;
   }
 `;
+=======
+import PageWrapper from "../component/Wrapper/PageWrapper";
+import { css } from "@emotion/css";
+import CalendarSet from "./Calendar";
+
+export default function MyPage(props) {
+
+  return (
+    <PageWrapper>
+      <CalendarSet/>
+    </PageWrapper>
+  );
+}
+>>>>>>> Stashed changes
