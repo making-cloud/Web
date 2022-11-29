@@ -61,7 +61,8 @@ export default function CalendarSet(props) {
         tileContent={({ date, view }) => {
           let html=[];
           var marks = JSON.parse(localStorage.getItem("marks"));
-          if (marks.find((x) => x === moment(date).format("YYYY-MM-DD"))) {
+          
+          if (marks?.find((x) => x === moment(date).format("YYYY-MM-DD"))) {
             html.push(<div className="dot"></div>);
           } return ( <><div className="flex">{html}</div></> );
         }}
