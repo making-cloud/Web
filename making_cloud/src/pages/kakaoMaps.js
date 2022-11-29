@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-
+import Seeingsite from './Data';
 
 
 const MapContainer = () => {
@@ -67,12 +67,16 @@ const MapContainer = () => {
     
     }, []);
 
+   
 
     return (
+        <>
         <div id='myMap' style={{    //지도 크기
             width: '790px', 
             height: '550px'
         }}></div>
+        <Seeingsite />
+        </>
     );
     
 }

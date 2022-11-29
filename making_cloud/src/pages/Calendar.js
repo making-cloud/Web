@@ -4,6 +4,7 @@ import moment from 'moment';
 import { css } from "@emotion/css";
 import { LineChart, Line, XAxis, YAxis,
   CartesianGrid, Legend } from "recharts";
+  import Locate, { Locale } from "./Data";
 
 export default function CalendarSet(props) {
   const [value, onChange] = useState(new Date()); //현재날짜
@@ -61,7 +62,10 @@ export default function CalendarSet(props) {
         tileContent={({ date, view }) => {
           let html=[];
           var marks = JSON.parse(localStorage.getItem("marks"));
+<<<<<<< Updated upstream
           
+=======
+>>>>>>> Stashed changes
           if (marks?.find((x) => x === moment(date).format("YYYY-MM-DD"))) {
             html.push(<div className="dot"></div>);
           } return ( <><div className="flex">{html}</div></> );
@@ -108,7 +112,7 @@ export default function CalendarSet(props) {
             </LineChart>
         </div>
       ) }
-
+      <Locate></Locate>
     </div>
   );
 }
