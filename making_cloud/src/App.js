@@ -4,7 +4,7 @@ import MainPage from "./pages/MainPage";
 import MapPage from "./pages/MapPage";
 import MyPage from "./pages/MyPage";
 import Settings from "./pages/SettingsPage";
-
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -15,6 +15,7 @@ function App() {
           <Route path="/my" element={<MyPage />} />
           <Route path="/details" element={<Details />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/Login" element={<LoginPage />} />
         </Routes>
       </Router>
   );

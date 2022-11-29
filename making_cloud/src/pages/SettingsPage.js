@@ -1,8 +1,8 @@
 import React from "react";
 import PageWrapper from "../component/Wrapper/PageWrapper";
-
+import Main from "./hello";
 function SettingsPage(props) {
-  return <PageWrapper>설정페이지입니다.</PageWrapper>;
+  return <PageWrapper><Main /></PageWrapper>;
 }
 
 export default SettingsPage;

@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 
+import Seeingsite from './Data';
+
 const MapContainer = () => {
     
     const { kakao } = window;
@@ -366,12 +368,16 @@ const MapContainer = () => {
 		map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
     }, []);
 
+   
 
     return (
+        <>
         <div id='myMap' style={{    //지도 크기
             width: '900px', 
             height: '700px'
         }}></div>
+        <Seeingsite />
+        </>
     );
     
 }
