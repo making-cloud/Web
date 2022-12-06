@@ -1,17 +1,9 @@
-<<<<<<< Updated upstream
-import React, { useEffect } from 'react';
-=======
 import React, { Component, useEffect, useState } from 'react';
 import db from '../Firebase/firebase';
 import { collection,setDoc,doc, getDocs, query,getDoc } from 'firebase/firestore';
 import { async } from '@firebase/util';
->>>>>>> Stashed changes
 
-import Seeingsite from './Data';
-
-const MapContainer = () => {
-    
-    
+const MapContainer = () => {    
     const { kakao } = window;
 
     useEffect(() => {  //지도 표시 시작
@@ -325,59 +317,6 @@ const MapContainer = () => {
             var marker = new kakao.maps.Marker({    // 마커를 생성
                 map: map, // 마커를 표시할 지도
                 position: positions[i].latlng, // 마커를 표시할 위치
-<<<<<<< Updated upstream
-                clickable:true,
-                image:markerImage //이미지 못 골라서 임시 주석
-            });
-
-            var overlay = new kakao.maps.CustomOverlay({
-                content: content,
-                map: map,
-                position: marker.getPosition()       
-            });
-            overlay.setVisible(false)
-            //마커를 클릭했을 때 커스텀 오버레이를 표시합니다
-            kakao.maps.event.addListener(marker, 'click', function() {
-                overlay.setVisible(true)
-            });
-            
-            // 커스텀 오버레이를 닫기 위해 호출되는 함수입니다 
-            // function closeOverlay() {
-            //     overlay.setMap(null);     
-            // }
-            
-
-            // var infowindow = new kakao.maps.InfoWindow({
-            //     content : positions[i].title,
-            //     removable:true,
-            // });
-
-            // kakao.maps.event.addListener(marker, 'click',makeClickListener(map,marker,infowindow));
-
-            // function makeClickListener(map,marker,overlay){
-            //     return function(){
-                    
-            //         infowindow.open(map,marker);
-            //     };
-            // }
-
-        
-
-            // if (marker) {
-            //     marker.addListener('click', function() {
-            //         //중심 위치를 클릭된 마커의 위치로 변경
-            //         map.setCenter(this.getPosition());
-                    
-            //     });
-            // }
-        }
-
-        // 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
-        var mapTypeControl = new kakao.maps.MapTypeControl();
-		map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
-    }, []);
-
-=======
                 title : positions[i].title,
                  image:markerImage //이미지 못 골라서 임시 주석
             })
@@ -413,8 +352,6 @@ const MapContainer = () => {
         })
         
         }
->>>>>>> Stashed changes
-   
 
     return (
         <>

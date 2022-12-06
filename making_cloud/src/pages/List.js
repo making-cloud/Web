@@ -31,12 +31,16 @@ const box = css`
   padding-left: 10px;
 `;
 const del = css`
+  width: 50px;
+  height: 20px;
+  line-height : 10px;
+  text-align : center;
   border : 1px solid #2b5682;
   border-radius: 5px;
   background-color: #bbddff;
   font-family: Arial, Helvetica, sans-serif;
   float: right;
-  margin-top: 3.5px;
+  margin-top: 5px;
   margin-left: -10px;
   margin-right: 10px;
 `;
