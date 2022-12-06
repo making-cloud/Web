@@ -1,0 +1,68 @@
+.Login_box,.passWord_box{
+    margin: 5px auto;
+    width: 99%;
+    height: 40px;
+   border: 1px solid;
+   font-size: medium;
+   position: relative;
+   
+}
+.submit_button{
+    height: 40px;
+    border: 0px;
+    margin: 5px auto;
+    background-color: black;
+    color: white;
+    font-size: medium;
+    line-height: 40px;
+    width: 100%;
+    height: 40px;
+}
+.submit_button:hover{
+    background-color: blue;
+}
+.gg{
+    text-align: start;
+   
+    color: blue;
+    text-decoration: underline;
+}
+.gg:active{
+    color: red;
+}
+
+form{
+    
+    
+    margin: 10px auto;
+    width: 60%;
+}
+.mainpage{
+    margin: auto;
+    position: relative;
+}
+.Google_login{
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    background-color: white;
+    color: black;
+    font-size: large;
+    border: solid black;
+}
+.Google_login:hover{
+    background-color: rgba(181, 179, 179, 0.78);
+}
+.findPassword{
+    color: blue;
+    text-decoration: underline;
+    text-align: right;
+}
+.findPassword:active{
+    color: red;
+}
+.di{
+    margin: 2%;
+    color: black;
+    text-decoration: none;
+}

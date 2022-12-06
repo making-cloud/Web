@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { doc, setDoc, getFirestore, collection, getDocs, where, query } from "firebase/firestore";
 // import { getAnalytics } from "firebase/analytics";
 import { getStorage, ref } from "firebase/storage";
+import { getAuth } from "firebase/auth";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -25,7 +26,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 export const storage = getStorage(app);
 export const storageRef = ref(storage);
-
+export const auth = getAuth(app);
 // Get a list of cities from your database
 export async function getComments() {
   const citiesCol = query(collection(db, "comments"), where('auth','==','heom'));
@@ -38,3 +39,8 @@ export async function setComments(commentsId, commentsValue) {
   const comments = await setDoc(doc(db, "comments", commentsId), {auth: 'heom', 'comments': commentsValue});
   console.log(comments);
 }
+export default db
+
+
+
+

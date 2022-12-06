@@ -14,6 +14,8 @@ export default function MyPage(props) {
   const [goalAdd_p, set_goalAdd_P] = useState(false);
   const [goalAdd, set_goalAdd] = useState(false);
   const [goalLog, set_goalLog] = useState(true);
+  const [clearLog, setClearLog] = useState(false);
+  const [nowLog, setNowLog] = useState(true);
 
   const [value, onChange] = useState(new Date()); //현재날짜
   const [day, setDay] = useState(moment(value).format("YYYY-MM-DD")); //선택날짜
@@ -27,13 +29,15 @@ export default function MyPage(props) {
   const [smokeGoal, setSmokeGoal] = useState('설정중...');
   const [numsmoke, setNumsmoke] = useState('1');
   const [strsmoke, setStrsmoke] = useState('개비');
+  const [count_G, setCount_G] = useState(0);  
   const handleSelect_term = (e) => {setNumTerm(e.target.value)};
   const handleSelect_term2 = (e) => {setStrTerm(e.target.value)};
   const handleSelect_smoke = (e) => {setNumsmoke(e.target.value)};
   const handleSelect_smoke2 = (e) => {setStrsmoke(e.target.value)};
 
   const [users, setUsers] = useState([]);         //배열
-  //const [goals, setGoals] = useState([]);
+  const [goals, setGoals] = useState([]);
+  const [clears, setClears] = useState([]);
   const [data, setData] = useState([
     { month: '1월', SmokeCount: 0 },
     { month: '2월', SmokeCount: 0 },
@@ -48,9 +52,9 @@ export default function MyPage(props) {
     { month: '11월', SmokeCount: 0 },
     { month: '12월', SmokeCount: 0 }
   ]);
-  /*
+  
   const nextId_G  = useRef(0);
-  const onCreate_G = () = {
+  const onCreate_G = () => {
     const newG = {
       id: nextId_G.current,
       goalday: goalday,
@@ -59,8 +63,34 @@ export default function MyPage(props) {
       smokeGoal: smokeGoal
     }
     setGoals([...goals, newG]);
+    setCount_G(count_G + 1);
+    nextId_G.current += 1;
   }
-  */
+  const onRemove_G = id =>{
+    setGoals(goals.filter(goal => goal.id !== id));
+    setCount_G(count_G - 1);
+  };
+  const nextId_C  = useRef(0);
+  const onClear = id => {
+    var changeValue = goals.filter(goal => goal.id === id)
+    console.log(changeValue)
+    const newC = {
+      id: nextId_C.current,
+      goalday: changeValue[0].goalday,
+      lastGoalD: changeValue[0].lastGoalD,
+      term: changeValue[0].term,
+      smokeGoal: changeValue[0].smokeGoal
+    }
+    console.log(newC)
+    setClears([...clears, newC]);
+    nextId_C.current += 1;
+    setGoals(goals.filter(goal => goal.id !== id));
+    setCount_G(count_G - 1);
+  }
+  const onRemove_C = id =>{
+    setClears(goals.filter(clear => clear.id !== id));
+  };
+
   const nextId  = useRef(0);
   const onCreate = () => {            //기록 추가
     const newI = {
@@ -125,6 +155,7 @@ export default function MyPage(props) {
     ]);
     nextId.current=0;
   };
+  
   const [goalday, setGoalDay] = useState("설정중...");
   const lastday = new Date(value.getFullYear(), value.getMonth() + 1, 0).getDate();
   const [lastGoalD, setLastGoalD] = useState("");
@@ -142,12 +173,12 @@ export default function MyPage(props) {
         let calumonth = Number(day.substr(-5,2)) + 1;
         if (calumonth > 12){
           let caluyear = Number(day.substr(2,2)) + 1;
-          setLastGoalD("~"+String(caluyear)+"년"+String(calumonth-12)+"월"+String(caluday)+"일");
+          setLastGoalD(String(caluyear)+"년"+String(calumonth-12)+"월"+String(caluday)+"일");
         } else {
-          setLastGoalD("~"+day.substr(2,2)+"년"+String(calumonth)+"월"+String(caluday)+"일");
+          setLastGoalD(day.substr(2,2)+"년"+String(calumonth)+"월"+String(caluday)+"일");
         }
       } else {
-        setLastGoalD("~"+day.substr(2,2)+"년"+day.substr(5,2)+"월"+String(result)+"일");
+        setLastGoalD(day.substr(2,2)+"년"+day.substr(5,2)+"월"+String(result)+"일");
       }
     } else if (strterm === "주") {
       let result = Number(day.substr(-2,2)) + 7*Number(numterm);
@@ -156,32 +187,29 @@ export default function MyPage(props) {
         let calumonth = Number(day.substr(-5,2)) + 1;
         if (calumonth > 12){
           let caluyear = Number(day.substr(2,2)) + 1;
-          setLastGoalD("~"+String(caluyear)+"년"+String(calumonth-12)+"월"+String(caluday)+"일");
+          setLastGoalD(String(caluyear)+"년"+String(calumonth-12)+"월"+String(caluday)+"일");
         } else {
-          setLastGoalD("~"+day.substr(2,2)+"년"+String(calumonth)+"월"+String(caluday)+"일");
+          setLastGoalD(day.substr(2,2)+"년"+String(calumonth)+"월"+String(caluday)+"일");
         }
       } else {
-        setLastGoalD("~"+day.substr(2,2)+"년"+day.substr(5,2)+"월"+String(result)+"일");
+        setLastGoalD(day.substr(2,2)+"년"+day.substr(5,2)+"월"+String(result)+"일");
       }
     } else if (strterm === "달") {
       let result = Number(day.substr(5,2)) + Number(numterm);
+      let date_M= new Date(day.substr(0,4)+"-"+result+'-01')
+      var last_day = new Date(date_M.getFullYear(), date_M.getMonth() + 1, 0).getDate();
       if (result > 12) {
         let calumonth = result - 12;
-        let caluyear = Number(day.substr(2,2)) + 1;
-        setLastGoalD("~"+String(caluyear)+"년"+String(calumonth)+"월"+day.substr(-2,2)+"일"); //삭제
-        /* 달 계산 후 일단위가 넘어가는 경우
-        if (Number(day.substr(-2,2)) > lastday) {
-          setLastGoalD("~"+String(caluyear)+"년"+String(calumonth)+"월"+String(lastday)+"일");
-        } else {
-          setLastGoalD("~"+String(caluyear)+"년"+String(calumonth)+"월"+day.substr(-2,2)+"일");
-        }
-        */
+        let caluyear = Number(day.substr(2,2)) + 1
+        let date_calumonth= new Date("20"+caluyear+"-"+calumonth+'-01')
+        var last_day = new Date(date_calumonth.getFullYear(), date_calumonth.getMonth() + 1, 0).getDate();
+        setLastGoalD(String(caluyear)+"년"+String(calumonth)+"월"+last_day+"일");
       } else {
-        setLastGoalD("~"+day.substr(2,2)+"년"+String(result)+"월"+day.substr(-2,2)+"일");
+        setLastGoalD(day.substr(2,2)+"년"+String(result)+"월"+last_day+"일");
       }
     }
   };
-  // const lastday = new Date(caluyear.getFullYear(), calumonth.getMonth() + 1, 0).getDate();
+  
   const resetGoalSet =()=> {
     setNumTerm("1"); setStrTerm("일");
     setNumsmoke("1"); setStrsmoke("개비");
@@ -206,30 +234,32 @@ export default function MyPage(props) {
           } return ( <><div className="flex justify-center items-center absoluteDiv">{html}</div></> );
         }}    //>>>>>>>>>마크 변경
       />
-      <button className={removebutton} onClick={()=>{
-        set_warning(!visible_warning);
-        setVisible1(false);
-        set_chart(false);
-        set_goal(false); set_goalAdd_P(false); set_goalLog(true);
-        }}>모두 삭제</button>
-      <button className={goalbutton} onClick={()=>{
-        set_goal(!visible_goal); set_goalAdd_P(false); set_goalLog(true);
-        setVisible1(false);
-        set_chart(false);
-        set_warning(false);
-      }}>{visible_goal ? "목표 닫기" : "목표 설정"}</button>
-      <button className={button} onClick={()=>{
-          setVisible1(!visible1);
+      <div className={buttonspace}>
+        <button className={removebutton} onClick={()=>{
+          set_warning(!visible_warning);
+          setVisible1(false);
+          set_chart(false);
+          set_goal(false); set_goalAdd_P(false); set_goalLog(true);
+          }}>모두 삭제</button>
+        <button className={goalbutton} onClick={()=>{
+          set_goal(!visible_goal); set_goalAdd_P(false); set_goalLog(true);
+          setVisible1(false); setClearLog(false);
           set_chart(false);
           set_warning(false);
-          set_goal(false); set_goalAdd_P(false); set_goalLog(true);
-      }}> {visible1 ? "기록 닫기" : "기록"}</button>
-      <button className={chartbutton} onClick={()=>{
-          set_chart(!visible_chart);
-          setVisible1(false);
-          set_warning(false);
-          set_goal(false); set_goalAdd_P(false); set_goalLog(true);
-      }}> {visible_chart ? "통계 닫기" : "통계"}</button>
+        }}>{visible_goal ? "목표 닫기" : "목표 설정"}</button>
+        <button className={listbutton} onClick={()=>{
+            setVisible1(!visible1);
+            set_chart(false);
+            set_warning(false);
+            set_goal(false); set_goalAdd_P(false); set_goalLog(true);
+        }}> {visible1 ? "기록 닫기" : "기록"}</button>
+        <button className={chartbutton} onClick={()=>{
+            set_chart(!visible_chart);
+            setVisible1(false);
+            set_warning(false);
+            set_goal(false); set_goalAdd_P(false); set_goalLog(true);
+        }}> {visible_chart ? "통계 닫기" : "통계"}</button>
+      </div>
       { visible1 && (
         <div className={selectBox}>
           <b className={counttext}>총 흡연량 : {count}</b>
@@ -262,7 +292,8 @@ export default function MyPage(props) {
       ) }
       {visible_warning && (
         <div className={selectBox}>
-          <br/><p>기록을 모두 삭제하시겠습니까?</p><br/>
+          <br/><p>기록을 모두 삭제하시겠습니까?</p>
+          <p style={{color : "grey"}}>* 목표는 유지됩니다</p><br/>
           <button className={yesbutton} onClick={()=>{
             allClear();
             set_warning(!visible_warning);
@@ -274,15 +305,17 @@ export default function MyPage(props) {
       )}
       {visible_goal && (
         <div className={selectBox}>
-          <button onClick={()=>{
+          <button className={addGoalbox} onClick={()=>{
             set_goalAdd_P(!goalAdd_p); set_goalLog(!goalLog);
             set_goalAdd(false); /*>>>>>>>>>추가 도중 나가면 경고 문구 */
-            resetGoalSet();
+            resetGoalSet(); setNowLog(true); setClearLog(false);
           }}> {goalAdd_p ? "목표 설정 닫기" : "목표 추가 버튼"}</button>
+          <></>
           {goalAdd_p && ( 
-            <div>
+            <div style={{textalign: "left", lineheight: "1.5em"}}>
+              <span style={{position: "relative",left: "15%",top: "3px"}}>목표 설정중</span><br/><br/><hr/>
               <p>1. 달력에서 시작일을 설정해주세요</p>
-              <p>- 시작일 : {moment(value).format("YY년 M월 D일")}</p>
+              <p>- 시작일 : {moment(value).format("YY년 M월 D일")}</p><br/>
               <p>2. 목표 기간을 설정해주세요</p> {/* >>>>>>>달주일에 따른 수치변화*/}
                 <select onChange={handleSelect_term}>
                   <option value='1'>1</option>
@@ -298,7 +331,7 @@ export default function MyPage(props) {
                   <option value='주'>주</option>
                   <option value='달'>달</option>
                 </select>
-              <p>3. 흡연량을 설정해주세요</p>
+              <p><br/>3. 흡연량을 설정해주세요</p>
                 <select onChange={handleSelect_smoke}>
                   <option value='1'>1</option>
                   <option value='2'>2</option>
@@ -311,61 +344,172 @@ export default function MyPage(props) {
                   <option value='갑'>갑</option>
                 </select>
                 <br/>
-              <button onClick={()=>{set_goalAdd(true); handleGoal();}}>목표 설정</button>
+              <button className={button} onClick={()=>{
+                set_goalAdd(true); handleGoal();}}>목표 설정</button>
               {goalAdd && ( 
-                <div className={selectBox}>
+                <div>
+                  <hr/>
                   <p>내 목표</p><br/>
-                  <p>{goalday}{lastGoalD}</p>
+                  <p>{goalday} ~ {lastGoalD}</p>
                   <p>목표기간 : {term}</p>
                   <p>목표 흡연량 : {smokeGoal}</p><br/>
                   <p>이 목표로 설정하시겠습니까?</p>
-                  <button onClick={()=>{
-                    set_goalAdd_P(!goalAdd_p); set_goalLog(!goalLog); //onCreate_G();
+                  <button className={button} onClick={()=>{
+                    set_goalAdd_P(!goalAdd_p); set_goalLog(!goalLog);
+                    onCreate_G(); setNowLog(true); setClearLog(false);
                   }}>YES</button>
-                  <button onClick={()=>{set_goalAdd(false)}}>NO</button>
+                  <button className={button} onClick={()=>{set_goalAdd(false)}}>NO</button>
                 </div>
               )}
             </div>
           )}
-          {goalLog && ( //>>>>>>>>>적용하기
+          {goalLog && (
             <div>
-              <p>현재 목표 내역</p><br/>
-              <p>현재 설정한 목표가 없습니다.</p>
-              {/*<GoalList goals={goals} />*/}
+              <button className={endGoalbox} onClick={()=>{
+                setNowLog(!nowLog); setClearLog(!clearLog);
+              }}>{nowLog ? "달성한 목표" : "진행중인 목표"}</button>
+              {nowLog &&(
+                <div>
+                  <span style={{position: "relative", top: "3px"}}>현재 목표 내역</span><br/><br/><hr/>
+                  <p style={{margin: "5px"}}>진행중인 목표 수 : {count_G}</p>
+                  <GoalList goals={goals} onRemove_G={onRemove_G} onClear={onClear}/>
+                </div>
+              )}
+              {clearLog && (
+                <div>
+                  <span style={{position: "relative", top: "3px"}}>완료된 목표 내역</span><br/><br/><hr/>
+                  <ClearList clears={clears} onRemove_C={onRemove_C} />
+                </div>
+              )}
             </div>
           )}
-          {/* +메모 기입 창?*/}
         </div>
       )}
     </div>
   );
 }
-/*
-function Goal({ goal }) {
+//////////////////////////////진행중인 목표
+function Goal({ goal, onRemove_G, onClear}) {
   return (
     <div className={box}>
-      <p>{goal.goalday}{goal.lastGoalD}</p>
-      <p>목표기간 : {goal.term}</p>
-      <p>목표 흡연량 : {goal.smokeGoal}</p>
+      <span>{goal.goalday} ~ {goal.lastGoalD}</span>
+      <button className={boxbutton} onClick={() => onRemove_G(goal.id)}>삭제</button>
+      <br/><span>목표 기간 : {goal.term}   흡연량 : {goal.smokeGoal}</span>
+      <button className={boxbutton2} onClick={() => onClear(goal.id)}>목표 달성</button>
     </div>
   );
 }
-function GoalList({ goals }) {
+function GoalList({ goals, onRemove_G, onClear }) {
     return (
         <div>
-          {goals.map(user => ( <Goal goal={goal} key={goal.id}/> ))}
+          {goals.map(goal => ( <Goal goal={goal} key={goal.id} onRemove_G={onRemove_G} onClear={onClear}/>))}
         </div>
     );
 }
-*/
+///////////////////////////////완료된 목표
+function Clear({ clear, onRemove_C }) {
+  return (
+    <div className={clearbox}>
+      <span>{clear.goalday} ~ {clear.lastGoalD}</span>
+      <button className={boxbutton} onClick={() => onRemove_C(clear.id)}>삭제</button>
+      <pre>목표 기간 : {clear.term}   흡연량 : {clear.smokeGoal}</pre>
+    </div>
+  );
+}
+function ClearList({ clears, onRemove_C }) {
+    return (
+        <div>
+          {clears.map(clear => ( <Clear clear={clear} key={clear.id} onRemove_C={onRemove_C}/>))}
+        </div>
+    );
+}
+////////////////////////////////CSS
+const button = css`
+  border : 2px solid #2b5682;
+  border-radius: 5px;
+  padding: 2px;
+  margin: 2px;
+  font-size: 15px;
+`
+const box = css`
+  max-width: 90%;
+  text-align: left;
+  line-height: 1.5em;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #fff;
+  border : 1px solid #2b5682;
+  border-radius: 5px;
+  margin : 2px;
+  padding-left: 10px;
+`;
+const addGoalbox = css`
+  border : 2px solid #2b5682;
+  border-radius: 5px;
+  padding: 2px;
+  font-size: 15px;
+  float: right;
+  margin-right: 3%;
+`;
+const endGoalbox = css`
+  border : 2px solid #2b5682;
+  border-radius: 5px;
+  padding: 2px;
+  font-size: 15px;
+  float: left;
+  margin-left: 3%;
+`;
+const boxbutton = css`
+  font-size: 14px;
+  width: 60px;
+  height: 15px;
+  border : 2px solid #2b5682;
+  border-radius: 5px;
+  padding: 2px;
+  margin: 2px;
+  text-align : center;
+  line-height : 17px;
+  position: relative;
+  left: 10%;
+  bottom: 50%;
+`
+const boxbutton2 = css`
+  font-size: 14px;
+  width: 60px;
+  height: 15px;
+  border : 2px solid #2b5682;
+  border-radius: 5px;
+  padding: 2px;
+  margin: 2px;
+  text-align : center;
+  line-height : 17px;
+  position: relative;
+  left: 10%;
+`
+const clearbox = css`
+  max-width: 90%;
+  text-align: left;
+  line-height: 1.2em;
+  color : grey;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #fff;
+  border : 1px solid #2b5682;
+  border-radius: 5px;
+  margin : 2px;
+  padding-left: 10px;
+`;
+
+const buttonspace = css `
+  max-width: 400px;
+`
 const removebutton = css`
-  width: 75px;
+  font-size: 13px;
+  width: 60px;
+  height: 20px;
   border : 2px solid #822b2b;
   border-radius: 5px;
   background-color: #fbe8e8;
   font-family: Arial, Helvetica, sans-serif;
-  position: relative;
-  right: 50px;
+  float: left;
 `;
 const nobutton = css`
   width: 50px;
@@ -383,31 +527,36 @@ const yesbutton = css`
   font-family: Arial, Helvetica, sans-serif;
 `;
 const goalbutton = css`
-  width: 75px;
+  font-size: 13px;
+  width: 60px;
+  height: 20px;
   border : 2px solid #2b5682;
   border-radius: 5px;
   background-color: #e8f1fb;
   font-family: Arial, Helvetica, sans-serif;
   position: relative;
-  right: 45px;
+  right: 15%;
 `;
-const button = css`
-  width: 75px;
+const listbutton = css`
+  font-size: 13px;
+  width: 60px;
+  height: 20px;
   border : 2px solid #2b5682;
   border-radius: 5px;
   background-color: #bbddff;
   font-family: Arial, Helvetica, sans-serif;
   position: relative;
-  left: 45px;
+  left: 15%;
 `;
 const chartbutton = css`
-  width: 75px;
+  font-size: 13px;
+  width: 60px;
+  height: 20px;
   border : 2px solid #2b5682;
   border-radius: 5px;
   background-color: #e8f1fb;
   font-family: Arial, Helvetica, sans-serif;
-  position: relative;
-  left: 50px;
+  float: right;
 `;
 
 const selectBox = css`
@@ -431,17 +580,19 @@ const selectOp = css`
   margin-bottom: 5px;
 `;
 const selectOpButton = css`
+  width: 20px;
+  height : 18px;
   border : 2px solid #2b5682;
   border-radius: 5px;
   background-color: #bbddff;
   position : relative;
   left: 140px;
+  top: 2px;
 `;
 
 const page = css`
   max-width: 90%;
 `;
-
 const calendar = css`
   max-width: 400px;
   background-color: #fff;
@@ -458,6 +609,8 @@ const calendar = css`
     background-color: #f87171;
     display: flex;
     margin: auto;
+    position: relative;
+    top: 4px;
   }
 
  .react-calendar__navigation{
@@ -481,6 +634,7 @@ const calendar = css`
   font-size: 14px;
  }
  .react-calendar__tile {
+  line-height : 10px;
   height: 30px;
   color: #2b5682;
   background: none;

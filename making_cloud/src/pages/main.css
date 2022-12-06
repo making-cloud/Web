@@ -1,0 +1,48 @@
+.ToLogin{
+    margin-top: 15%;
+    width: 90%;
+    height: 75%;
+}
+
+.Gologin:hover{
+    color: red;
+}
+.User{
+    text-align: start;
+    margin-top: 0px;
+}
+
+.header{
+    margin-top: 0%;
+    height: 15%;
+    line-height: 200%;
+    
+   border-bottom: 1px solid black;
+}
+.Users{
+    color: red;
+    
+}
+.Calender{
+    text-align: start;
+}
+.LogOut{
+    
+   position: relative;
+   left: 42%;
+   bottom: 65%;
+    margin-left: 90%;
+    margin-bottom: 100%;
+    border-radius: 10%;
+    height: 50px;
+    width: 100px;
+    
+    line-height: 50px;
+    margin-left: 4%;
+    
+    
+    border: 2px solid black;
+}
+.LogOut:hover{
+    background-color: gray;
+}
