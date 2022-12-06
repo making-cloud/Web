@@ -1,9 +1,7 @@
-import React, { Component, useEffect, useState } from 'react';
-import db from '../Firebase/firebase';
-import { collection,setDoc,doc, getDocs, query,getDoc } from 'firebase/firestore';
-import { async } from '@firebase/util';
+import React, { useEffect } from 'react';
 
-const MapContainer = () => {    
+const MapContainer = () => {
+
     const { kakao } = window;
 
     useEffect(() => {  //지도 표시 시작
@@ -363,17 +361,46 @@ const MapContainer = () => {
                 });
             }
         }
-       
+
+        // for (var i=0;i<positions.length;i++) {
+        //     var markerTmp = new kakao.maps.Marker({
+        //         position: positions[i].latlng,
+        //         title: positions[i].title,
+        //         image: markerImage,
+        //         map:map
+        //     });
+
+
+        //     //커스텀 오버레이 내용 및 클릭시 이동 url
+
+        // var customOverlay = new kakao.maps.CustomOverlay({
+        //     map: map,
+        //     position: markerTmp.getPosition(),
+        //     content: contentStr,//클릭시 이동 url
+        //     yAnchor: 0.8,//컨텐츠의 y축 위치
+        //     clickable:true
+        // });
+
+        //     kakao.maps.event.addListener(markerTmp, 'click', function () {
+        //         customOverlay.setMap(map);
+        //     });
+
+
+
+        // }
+
+
+    }, []);
+
+
+
     return (
         <div id='map' style={{    //지도 크기
             width: '900px', 
             height: '700px'
-        }}></div>
-        <ol id="information">
-
-        </ol>
-             
-        </>
+        }} />
+        
+        
     );
     
 }
