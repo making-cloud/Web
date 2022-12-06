@@ -1,8 +1,16 @@
+<<<<<<< Updated upstream
 import React, { useEffect } from 'react';
+=======
+import React, { Component, useEffect, useState } from 'react';
+import db from '../Firebase/firebase';
+import { collection,setDoc,doc, getDocs, query,getDoc } from 'firebase/firestore';
+import { async } from '@firebase/util';
+>>>>>>> Stashed changes
 
 import Seeingsite from './Data';
 
 const MapContainer = () => {
+    
     
     const { kakao } = window;
 
@@ -317,6 +325,7 @@ const MapContainer = () => {
             var marker = new kakao.maps.Marker({    // 마커를 생성
                 map: map, // 마커를 표시할 지도
                 position: positions[i].latlng, // 마커를 표시할 위치
+<<<<<<< Updated upstream
                 clickable:true,
                 image:markerImage //이미지 못 골라서 임시 주석
             });
@@ -368,6 +377,43 @@ const MapContainer = () => {
 		map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
     }, []);
 
+=======
+                title : positions[i].title,
+                 image:markerImage //이미지 못 골라서 임시 주석
+            })
+          Locate(positions[i].title,positions[i].latlng.La,positions[i].latlng.Ma,i)
+        }
+         Seeingsite()  
+       
+
+    
+    },[]);
+   
+    async function Seeingsite(){
+        
+            const quertSnapshot = await getDocs(collection(db,"location"));
+           
+            quertSnapshot.forEach((doc)=>{
+              
+              
+              document.getElementById("information").insertAdjacentHTML(
+                "afterend",`<li>${doc.get("title")}</li>`
+              );
+            }
+            )
+    }
+       
+    
+    function Locate(title,La,ma,number){
+        var name = "SiteName"+String(number)
+        setDoc(doc(db,"location",name),{
+           title: title,
+           latitude: ma,
+           longtitude: La
+        })
+        
+        }
+>>>>>>> Stashed changes
    
 
     return (
@@ -376,7 +422,10 @@ const MapContainer = () => {
             width: '900px', 
             height: '700px'
         }}></div>
-        <Seeingsite />
+        <ol id="information">
+
+        </ol>
+             
         </>
     );
     
