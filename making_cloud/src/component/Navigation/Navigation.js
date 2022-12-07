@@ -31,9 +31,11 @@ function Navigation() {
 
   auth.onAuthStateChanged((_userInfo) => {
     if (_userInfo) {
-      if (pathname === "/") navigate("/map");
+      if (pathname === "/") {
+        navigate("/map");
+      }
     } else {
-      // navigate("/Login");
+      navigate("/Login");
     }
   });
 
