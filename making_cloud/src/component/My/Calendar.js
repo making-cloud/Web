@@ -90,7 +90,6 @@ export default function MyPage(props) {
   const nextId_C = useRef(0);
   const onClear = (id) => {
     var changeValue = goals.filter((goal) => goal.id === id);
-    console.log(changeValue);
     const newC = {
       id: nextId_C.current,
       goalday: changeValue[0].goalday,

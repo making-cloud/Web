@@ -1,7 +1,7 @@
 
 
 import {collection,doc, setDoc, getDocs, query,where} from "firebase/firestore"
-import db from "../../../Firebase/firebase"
+import db from "./firebase"
     
 export function setLocation(title,latitude,longtitude,circum){
     setDoc(doc(db,"location",title),{

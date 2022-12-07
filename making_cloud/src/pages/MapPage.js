@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { sendGetdRequest } from "../component/Hooks/sendGetdRequest";
 import PageWrapper from "../component/Wrapper/PageWrapper";
 import axios from "axios";
-import { getLocation, setLocation } from "../component/Map/Map/DataLocation";
+import { getLocation, setLocation } from "../Firebase/location";
 import MapContainer from "./MapContainer";
 
 const MapPage = () => {
