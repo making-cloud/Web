@@ -9,6 +9,7 @@ import {
 import { RiSettings4Line, RiSettings4Fill } from "react-icons/ri";
 import { auth } from "../../Firebase/firebase";
 import { useState } from "react";
+import { useUserContext } from "../../contexts/UserContext";
 
 const NaviItems = ({ title, path, nowPath, logo, onClickLogo }) => {
   const isClicked = path === nowPath;
@@ -26,18 +27,12 @@ const NaviItems = ({ title, path, nowPath, logo, onClickLogo }) => {
 };
 
 function Navigation() {
+  const { user, setUser } = useUserContext();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  auth.onAuthStateChanged((_userInfo) => {
-    if (_userInfo) {
-      if (pathname === "/") {
-        navigate("/map");
-      }
-    } else {
-      navigate("/Login");
-    }
-  });
+  if (!user)
+    navigate('/login');
 
   return (
     <div className={container}>

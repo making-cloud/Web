@@ -1,19 +1,14 @@
 import { css, cx } from "@emotion/css";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { auth } from "../../Firebase/firebase";
 import { useState } from "react";
+import { useUserContext } from "../../contexts/UserContext";
 
 const Main = () => {
-  const [User, setuser] = useState(false);
-  auth.onAuthStateChanged((currentuser) => {
-    if (currentuser) {
-      setuser(true);
-    } else {
-      setuser(false);
-    }
-  });
+  const { user, setUser } = useUserContext();
+  const navigate = useNavigate();
+
   var nm = "";
-  const user = auth.currentUser;
 
   if (user) {
     const Email = user.email;
@@ -21,7 +16,8 @@ const Main = () => {
   }
   const onLogOutClick = () => {
     auth.signOut();
-    window.location.href = "/";
+    setUser(null);
+    navigate("/");
   };
   return !user ? (
     <>
@@ -36,7 +32,7 @@ const Main = () => {
     <>
       <header className="header">
         <p className="User">
-          <div className="Users" dangerouslySetInnerHTML={{ __html: nm }} />님
+          <div className="Users" />{nm}님
           환영합니다.
         </p>
 

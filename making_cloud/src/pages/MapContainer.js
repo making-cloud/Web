@@ -49,7 +49,7 @@ function MapContainer({ locaDatas }) {
         var customOverlay = new kakao.maps.CustomOverlay({
           map: map,
           position: markerTmp.getPosition(),
-          content: content, //클릭시 이동 url
+          content: '하이', //클릭시 이동 url
           yAnchor: 1.5, //컨텐츠의 y축 위치
           clickable: true,
         });
@@ -85,7 +85,7 @@ function MapContainer({ locaDatas }) {
       style={{
         //지도 크기
         width: "100%",
-        height: "60%",
+        height: "100%",
       }}
     />
   );
