@@ -1,6 +1,6 @@
 import React from "react";
 import PageWrapper from "../component/Wrapper/PageWrapper";
-import Main from "./hello";
+import Main from "../component/Login/hello";
 function SettingsPage(props) {
   return <PageWrapper><Main /></PageWrapper>;
 }

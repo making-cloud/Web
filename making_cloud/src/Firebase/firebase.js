@@ -35,10 +35,16 @@ export async function getComments() {
   return cityList;
 }
 
-export async function setComments(commentsId, commentsValue) {
-  const comments = await setDoc(doc(db, "comments", commentsId), {auth: 'heom', 'comments': commentsValue});
+export async function setComments(userId, commentsId, commentsValue) {
+  const comments = await setDoc(doc(db, "comments", userId), {auth: commentsId, 'comments': commentsValue});
   console.log(comments);
 }
+
+export async function getUserInfo(userId)
+{
+  
+}
+
 export default db
 
 

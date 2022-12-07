@@ -1,0 +1,136 @@
+import { css, cx } from "@emotion/css";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithRedirect,
+  sendPasswordResetEmail,
+} from "firebase/auth";
+import { auth } from "../Firebase/firebase";
+import { useState } from "react";
+import "./Login.css";
+
+function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [newAccount, setNewAccount] = useState(true);
+  const [error, setError] = useState("");
+  
+  const Navigate = useNavigate();
+  const user = auth.currentUser;
+
+  if (user)
+    Navigate('/map')
+
+  const handleGoogleLogin = async (event) => {
+    const provider = new GoogleAuthProvider();
+    await signInWithRedirect(auth, provider);
+    console.log('hh');
+    Navigate("/map");
+  };
+
+  function onChange(event) {
+    const {
+      target: { name, value },
+    } = event;
+    if (name === "email") {
+      setEmail(value);
+    } else if (name === "password") {
+      setPassword(value);
+    }
+  }
+
+  const changePasswordUsingEmail = async () => {
+    var email = prompt("이메일을 입력해 주세요.");
+    try {
+      await sendPasswordResetEmail(auth, email);
+      alert("비밀번호 수정 url을 보냈습니다.");
+    } catch (error) {
+      console.log(error);
+      alert("입력하신 정보의 유저가 없습니다.");
+    }
+  };
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      let data;
+      // create account
+      if (!newAccount) {
+        try {
+          data = await createUserWithEmailAndPassword(auth, email, password);
+          Navigate("/map");
+        } catch (error) {
+          alert("이미 계정이 있습니다.");
+        }
+        // log in
+      } else {
+        try {
+          data = await signInWithEmailAndPassword(auth, email, password);
+          Navigate("/map");
+        } catch (error) {
+          alert("없는 계정이거나 비번이 잘못입력하신것 같습니다.");
+        }
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const toggleAccount = () => setNewAccount((prev) => !prev);
+  const State = () => {
+    return (
+      <>
+        <form onSubmit={onSubmit}>
+          <h3>{!newAccount ? "회원가입" : "로그인"}</h3>
+          <input
+            className="Login_box"
+            label="Email Address"
+            name="email"
+            type="email"
+            required
+            value={email}
+            onChange={onChange}
+            placeholder="이메일"
+          />
+          <input
+            className="passWord_box"
+            label="password"
+            name="password"
+            type="password"
+            required
+            value={password}
+            onChange={onChange}
+            placeholder="비밀번호"
+          />
+          <button
+            className="submit_button"
+            type="submit"
+            value={!newAccount ? "Create Account" : "Sign In"}
+          >
+            {!newAccount ? "Create Account" : "Sign in"}
+          </button>
+          <div style={{ justifyContent: "space-between" }}>
+            <div style={{ textAlign: "start" }}>
+              <span onClick={toggleAccount} className="gg">
+                {!newAccount ? "Sign in" : "Create Account"}
+              </span>
+              <span className="di">|</span>
+              <span className="findPassword" onClick={changePasswordUsingEmail}>
+                비밀번호 찾기
+              </span>
+            </div>
+          </div>
+
+          <p className="Google_login" name="Google" onClick={handleGoogleLogin}>
+            continue with Google
+          </p>
+        </form>
+      </>
+    );
+  };
+  return State();
+}
+
+export default LoginPage;

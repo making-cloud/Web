@@ -85,10 +85,6 @@ function UserRating() {
     });
   }
 
-  // function handleTextChange(e) {
-  //   setTextValue(e.target.value);
-  // }
-
   return (
     <div className={userEvalBox}>
       <div>{evalImgsUrl && evalImgsUrl.length > 0 && ratingImg()}</div>

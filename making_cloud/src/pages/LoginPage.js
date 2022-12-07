@@ -3,9 +3,9 @@ import { Link, } from "react-router-dom";
 import {createUserWithEmailAndPassword,signInWithEmailAndPassword,GoogleAuthProvider,signInWithRedirect, sendPasswordResetEmail, getRedirectResult} from "firebase/auth"
 import { auth } from "../Firebase/firebase";
 import { useState } from "react";
-import "./Login.css"
-import { async } from "@firebase/util";
-const Login=()=>{
+import "../component/Login/Login.css"
+
+function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [newAccount, setNewAccount] = useState(true);
@@ -110,5 +110,5 @@ const Login=()=>{
     )
 }
 
-export default Login;
+export default LoginPage;
 

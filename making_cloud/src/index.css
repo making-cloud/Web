@@ -172,3 +172,21 @@ a:active {
   text-decoration: none;
   color: inherit;
 }
+
+@font-face {
+  font-family: 'dongle';
+  font-weight: 700;
+  src: url('../assets/fonts/Dongle-Bold.ttf')
+}
+
+@font-face {
+  font-family: 'dongle';
+  font-weight: 500;
+  src: url('../assets/fonts/Dongle-Regular.ttf')
+}
+
+@font-face {
+  font-family: 'dongle';
+  font-weight: 300;
+  src: url('../assets/fonts/Dongle-Light.ttf')
+}

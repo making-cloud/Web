@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { sendGetdRequest } from "../component/Hooks/sendGetdRequest";
 import PageWrapper from "../component/Wrapper/PageWrapper";
 import axios from 'axios';
-import MapContainer from "./kakaoMaps";
+import MapContainer from "../component/Map/Map/kakaoMaps";
 
 
 

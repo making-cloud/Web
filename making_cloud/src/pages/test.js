@@ -1,7 +1,7 @@
 
 
 import { async } from "@firebase/util";
-import { getTitle, getLatitude,getLongtitude } from "./DataLocation";
+import { getTitle, getLatitude,getLongtitude } from "../component/Map/Map/DataLocation";
  async function Test(){
     let tester
     try{
@@ -21,7 +21,6 @@ import { getTitle, getLatitude,getLongtitude } from "./DataLocation";
 
 
 export default async function TEXT(){
-    
        Test()
     }
 

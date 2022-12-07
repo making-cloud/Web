@@ -15,15 +15,15 @@ function PageWrapper(props) {
 
 const container = css`
   position: relative;
-  // width: 390px;
   min-height: 600px;
-  border: 1px solid black;
+  width: 100%;
   margin: 0 auto;
 `;
 
 const listWrapper = css`
-  margin-bottom: 50px;
-  height: calc(100vh - 50px);
+  margin-left: 244px;
+  width: calc(100%- 244px);
+  height: 100vh;
   overflow-y: scroll;
 `
 
