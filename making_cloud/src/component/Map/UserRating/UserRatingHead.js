@@ -2,13 +2,13 @@ import { css } from "@emotion/css";
 import { useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
-function UserRatingHead({ratingLen, imgLen}) {
+function UserRatingHead({ratingLen, imgLen, nowPath}) {
   const [isLikedButton, setIsLikedButton] = useState(false);
 
   return (
     <div className={userEvalHead}>
       <div>
-        <p className={headTitle}>용산구 흡연구역</p>
+        <p className={headTitle}>{nowPath}</p>
         <button
           className={likeButton}
           onClick={() => setIsLikedButton(!isLikedButton)}

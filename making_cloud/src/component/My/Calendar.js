@@ -384,7 +384,6 @@ export default function MyPage(props) {
             set_goalLog(true);
           }}
         >
-          {" "}
           {visible1 ? "기록 닫기" : "기록"}
         </button>
         <button

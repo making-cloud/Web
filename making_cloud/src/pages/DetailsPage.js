@@ -1,10 +1,12 @@
+import { useParams } from "react-router-dom";
 import UserRating from "../component/Map/UserRating/UserRating";
 import PageWrapper from "../component/Wrapper/PageWrapper";
 
 function DetailsPage() {
+  const {id: nowPath} = useParams();
   return (
     <PageWrapper>
-      <UserRating />
+      <UserRating nowPath={nowPath}/>
     </PageWrapper>
   );
 }

@@ -1,29 +1,27 @@
 
 
-import { async } from "@firebase/util";
-import {collection,doc,addDoc, setDoc, getDoc, getDocs, query,where, orderBy} from "firebase/firestore"
+import {collection,doc, setDoc, getDocs, query,where} from "firebase/firestore"
 import db from "../../../Firebase/firebase"
-class site{
-    constructor(title,latitude,longtitude){
-        this.title=title;
-        this.latitude=latitude;
-        this.longtitude=longtitude;
-    }
-    toString(){
-        return this.title+','+this.latitude+","+this.longtitude;
-    }
-}
     
-export function Locate(title,La,ma,number){
-    var name = "SiteName"+String(number)
-    setDoc(doc(db,"location",name),{
-       title: title,
-       latitude: ma,
-       longtitude: La
+export function setLocation(title,latitude,longtitude,circum){
+    setDoc(doc(db,"location",title),{
+       'title': title,
+       'latitude': latitude,
+       'longtitude': longtitude,
+       'circum':circum 
     })
     
 }
 
+export const getLocation = async() => {
+    const rawDatas = await getDocs(collection(db,"location"));
+
+    let datas = []
+    rawDatas.forEach((doc) => {
+        datas = [...datas, doc.data()];
+    })
+    return datas;
+}
 
 export const getTitle= async(Title) => {
     const title = query(collection(db,"location"),where("title","==",Title))

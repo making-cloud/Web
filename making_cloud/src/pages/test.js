@@ -9,7 +9,6 @@ import { getTitle, getLatitude,getLongtitude } from "../component/Map/Map/DataLo
        if(tester === "서울특별시 용산구 서울역 광장 15번출구"){
             let hello = await getLatitude(tester)
             let goodbye = await getLongtitude(tester)
-            console.log(hello,goodbye)
        }
         console.log(tester)
     }

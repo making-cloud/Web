@@ -30,7 +30,6 @@ function Navigation() {
   const { pathname } = useLocation();
 
   auth.onAuthStateChanged((_userInfo) => {
-    console.log(_userInfo);
     if (_userInfo) {
       if (pathname === "/") navigate("/map");
     } else {

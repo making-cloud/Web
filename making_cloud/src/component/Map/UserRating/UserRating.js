@@ -9,7 +9,7 @@ import UserProfile from "./UserProfile";
 
 const imagesRef = ref(storage, "/images");
 
-function UserRating() {
+function UserRating({nowPath}) {
   const [localFiles, setLocalFiles] = useState(null);
   const [firebaseImgRef, setFirebaseImgRef] = useState([]);
   const [evalImgsUrl, setEvalImgsUrl] = useState([]);
@@ -88,7 +88,7 @@ function UserRating() {
   return (
     <div className={userEvalBox}>
       <div>{evalImgsUrl && evalImgsUrl.length > 0 && ratingImg()}</div>
-      <UserRatingHead ratingLen={lastTextData.length} imgLen={evalImgsUrl.length} />
+      <UserRatingHead ratingLen={lastTextData.length} imgLen={evalImgsUrl.length} nowPath={nowPath} />
       <div className={sectionDiv} />
       <section className={userEvalBody}>
         <table>

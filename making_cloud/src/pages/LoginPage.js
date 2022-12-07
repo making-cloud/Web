@@ -56,7 +56,7 @@ function LoginPage() {
             // create account
             try{data = await createUserWithEmailAndPassword(auth,email, password);(window.location.href="/");}
             catch(error){
-              alert("이미 계정이 있습니다.")
+              alert(`${error}`);
             }
           } else {
             // log in
