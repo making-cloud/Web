@@ -1,94 +1,129 @@
-import React, { useEffect } from "react";
+import { css } from "@emotion/css";
+import { useState } from "react";
+import {
+  Map,
+  CustomOverlayMap,
+  CustomOverlay1Style,
+} from "react-kakao-maps-sdk";
+import { AiTwotoneCloud } from "react-icons/ai";
 
 function MapContainer({ locaDatas }) {
-  const { kakao } = window;
-  // new kakao.maps.LatLng(37.553149, 126.968881),
-  useEffect(() => {
-    //지도 표시 시작
-    var mapContainer = document.getElementById("map"), // 지도를 표시할 div
-      mapOption = {
-        center: new kakao.maps.LatLng(37.539237, 126.97959), // 지도의 중심좌표
-        level: 6, // 지도의 확대 레벨
-      };
-    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+  const EventMarkerContainer = ({ position, onClick, children }) => {
+    const [isOver, setIsOver] = useState(false);
 
-    // 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
-    var mapTypeControl = new kakao.maps.MapTypeControl();
-
-    // 지도에 컨트롤을 추가해야 지도위에 표시됩니다
-    // kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미합니다
-    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
-
-    // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
-    var zoomControl = new kakao.maps.ZoomControl();
-    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-
-    var imageSrc =
-      "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png"; // 마커이미지 주소
-    var imageSize = new kakao.maps.Size(34, 36); // 마커이미지의 크기
-    var imageOption = { offset: new kakao.maps.Point(17, 36) }; // 마커의 좌표와 일치시킬 이미지 안에서의 좌표설정
-
-    // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-    var markerImage = new kakao.maps.MarkerImage(
-      imageSrc,
-      imageSize,
-      imageOption
+    return (
+      <CustomOverlayMap
+        position={position} // 마커를 표시할 위치
+        onClick={onClick}
+        onMouseOver={() => setIsOver(true)}
+        onMouseOut={() => setIsOver(false)}
+        removable={false}
+      >
+        {children}
+      </CustomOverlayMap>
     );
+  };
 
-    for (let i = 0; i < locaDatas.length; i++) {
-      var data = locaDatas[i];
-      displayMarker(data);
-
-      function displayMarker(data) {
-        var markerTmp = new kakao.maps.Marker({
-          position: new kakao.maps.LatLng(data.latitude, data.longtitude),
-          title: data.title,
-          image: markerImage,
-          map: map,
-        });
-        var customOverlay = new kakao.maps.CustomOverlay({
-          map: map,
-          position: markerTmp.getPosition(),
-          content: '하이', //클릭시 이동 url
-          yAnchor: 1.5, //컨텐츠의 y축 위치
-          clickable: true,
-        });
-
-        var content = document.createElement("div");
-        content.innerHTML =
-          `<div class='customoverlay'>` +
-            `<a href="http://localhost:3000/map/${data.title}" +"' target='_blank'>`+
-              `<span class='title'>` +
-                data.title +
-              `</span>`+
-            `</a>`+
-          `</div>`;
-        var closeBtn = document.createElement("button");
-        closeBtn.innerHTML = "X";
-        closeBtn.onclick = function () {
-          customOverlay.setMap(null);
-        };
-
-        content.appendChild(closeBtn);
-        customOverlay.setContent(content);
-
-        kakao.maps.event.addListener(markerTmp, "click", function () {
-          customOverlay.setMap(map);
-        });
-      }
-    }
-  }, [locaDatas]);
+  const markers = locaDatas.map((locaData, index) => {
+    console.log(locaData);
+    return (
+      <EventMarkerContainer
+        key={locaData.title}
+        position={{ lat: locaData.latitude, lng: locaData.longtitude }}
+      >
+        <div className={markPoint} />
+        <div className={markContainer}>
+          <div className={markImg}>
+            <AiTwotoneCloud
+              style={{ width: "100%", height: "100%", color: "white" }}
+            />
+          </div>
+          <a
+            className={marTitle}
+            style={{ color: "#000", width: "100%", height: "100%" }}
+            href={`http://localhost:3000/map/${locaData.title}`}
+          >
+            {locaData.title}
+          </a>
+        </div>
+        <div />
+      </EventMarkerContainer>
+    );
+  }, []);
 
   return (
-    <div
-      id="map"
-      style={{
-        //지도 크기
-        width: "100%",
-        height: "100%",
-      }}
-    />
+    <>
+      <Map
+        center={{ lat: 37.539237, lng: 126.97959 }}
+        style={{ width: "100%", height: "100%" }}
+        level={6}
+      >
+        {markers}
+      </Map>
+    </>
   );
 }
+
+const markPoint = css`
+  position: absolute;
+  bottom: -5px;
+  left: 15px;
+  width: 0;
+  height: 0;
+  border-color: #0475f4 transparent transparent;
+  border-style: solid;
+  border-width: 6px 4px 0;
+  pointer-events: none;
+  &:before {
+    opacity: 0.1;
+    position: absolute;
+    bottom: -2px;
+    left: -5px;
+    width: 10px;
+    height: 3px;
+    background-color: #000;
+    filter: blur(1px);
+    content: "";
+  }
+  &:after {
+    width: 0;
+    height: 0;
+    border-color: #fff transparent transparent;
+    border-style: solid;
+    border-width: 9px 6px 0;
+    position: absolute;
+    top: -11px;
+    left: -6px;
+    content: "";
+  }
+`;
+
+const markContainer = css`
+  display: flex;
+  height: 40px;
+  border: 1px solid #0475f4;
+  border-radius: 23px;
+  padding: 5px;
+  background: #fff;
+  font-size: 13px;
+`;
+
+const markImg = css`
+  width: 28px;
+  height: 28px;
+  padding: 2px 4px 4px 4px;
+  border-radius: 23px;
+  border: 1px solid #0475f4;
+  background: #0475f4;
+`;
+
+const marTitle = css`
+  margin: -2px 0;
+  padding: 2px 9px 2px 5px;
+  font-size: 13px;
+  line-height: 28px;
+  letter-spacing: -0.4px;
+  font-weight: 600;
+`;
 
 export default MapContainer;

@@ -4,6 +4,7 @@ import PageWrapper from "../component/Wrapper/PageWrapper";
 
 function DetailsPage() {
   const {id: nowPath} = useParams();
+  console.log('nowPath');
   return (
     <PageWrapper>
       <UserRating nowPath={nowPath}/>

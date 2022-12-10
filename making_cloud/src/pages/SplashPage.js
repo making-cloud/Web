@@ -1,15 +1,18 @@
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import PageWrapper from "../component/Wrapper/PageWrapper";
 import { useUserContext } from "../contexts/UserContext";
 
 function SplashPage(props) {
-  const navigate = useNavigate();
+  const history = useHistory();
 
   const {user} = useUserContext();
   console.log('spl');
   console.log(user);
   if (!user)
-    navigate("/login");
+  {
+    console.log('sss');
+    history.push("/login");
+  }
 
 
   return (

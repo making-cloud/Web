@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useHistory, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import {
   createUserWithEmailAndPassword,
@@ -20,12 +20,12 @@ function LoginPage() {
   const [error, setError] = useState("");
 
   const { user, setUser } = useUserContext();
-  const Navigate = useNavigate();
+  const history = useHistory();
 
   auth.onAuthStateChanged((currentuser) => {
     if (currentuser) {
       setUser(currentuser);
-      Navigate("/map");
+      history.push("/map");
     } else {
       setUser(null);
     }

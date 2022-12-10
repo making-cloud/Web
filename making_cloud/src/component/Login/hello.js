@@ -1,12 +1,12 @@
 import { css, cx } from "@emotion/css";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { auth } from "../../Firebase/firebase";
 import { useState } from "react";
 import { useUserContext } from "../../contexts/UserContext";
 
 const Main = () => {
   const { user, setUser } = useUserContext();
-  const navigate = useNavigate();
+  const history = useHistory();
 
   var nm = "";
 
@@ -17,7 +17,7 @@ const Main = () => {
   const onLogOutClick = () => {
     auth.signOut();
     setUser(null);
-    navigate("/");
+    history.push("/");
   };
   return !user ? (
     <>

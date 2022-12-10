@@ -1,5 +1,5 @@
 import { css, cx } from "@emotion/css";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import {
   BsCalendarCheck,
   BsCalendarCheckFill,
@@ -8,7 +8,7 @@ import {
 } from "react-icons/bs";
 import { RiSettings4Line, RiSettings4Fill } from "react-icons/ri";
 import { auth } from "../../Firebase/firebase";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUserContext } from "../../contexts/UserContext";
 
 const NaviItems = ({ title, path, nowPath, logo, onClickLogo }) => {
@@ -28,11 +28,19 @@ const NaviItems = ({ title, path, nowPath, logo, onClickLogo }) => {
 
 function Navigation() {
   const { user, setUser } = useUserContext();
-  const navigate = useNavigate();
+  const history = useHistory();
   const { pathname } = useLocation();
 
-  if (!user)
-    navigate('/login');
+  useEffect(() => {
+    auth.onAuthStateChanged((currentuser) => {
+      if (currentuser) {
+        setUser(currentuser);
+      } else {
+        setUser(null);
+        history.push("/login");
+      }
+    });
+  }, [])
 
   return (
     <div className={container}>
