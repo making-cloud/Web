@@ -27,23 +27,11 @@ const db = getFirestore(app);
 export const storage = getStorage(app);
 export const storageRef = ref(storage);
 export const auth = getAuth(app);
-// Get a list of cities from your database
-export async function getComments() {
-  const citiesCol = query(collection(db, "comments"), where('auth','==','heom'));
-  const citySnapshot = await getDocs(citiesCol);
-  const cityList = citySnapshot.docs.map((doc) => doc.data());
-  return cityList;
-}
 
-export async function setComments(userId, commentsId, commentsValue) {
-  const comments = await setDoc(doc(db, "comments", userId), {auth: commentsId, 'comments': commentsValue});
-  console.log(comments);
-}
-
-export async function getUserInfo(userId)
-{
+// export async function getUserInfo(userId)
+// {
   
-}
+// }
 
 export default db
 

@@ -1,24 +1,21 @@
 import { css } from "@emotion/css";
 
-function UserProfile({ userInfo, data }) {
-  if (!userInfo) {
-    userInfo = {
-      id: "홍길동",
-      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0aRz9tTn6Wo4PtQDYge6IbGvi--lR7NMH4hCUopc&s",
-      date: "2022.12.10",
-    };
+function UserProfile({ userId, data }) {
+  const userImg = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0aRz9tTn6Wo4PtQDYge6IbGvi--lR7NMH4hCUopc&s"
+  if (!userId) {
+    userId = '';
   }
 
   return (
     <div className={userRatingText}>
       <div className={userProfileBox}>
-        <img className={userProfileImg} src={userInfo.img} alt={userInfo.id} />
+        <img className={userProfileImg} src={userImg} alt={'profile'} />
         <div className={userProfileInfo}>
-          <div className={userId}>{userInfo.id}</div>
-          <div className={userCommentDate}>{userInfo.date}</div>
+          <div className={userId}>{userId}</div>
+          <div className={userCommentDate}>{data.date}</div>
         </div>
       </div>
-      <div className={commentContents}>{data}</div>
+      <div className={commentContents}>{data.comments}</div>
     </div>
   );
 }

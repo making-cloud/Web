@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { css } from "@emotion/css";
-import { getComments, setComments, storage } from "../../../Firebase/firebase";
+import { storage } from "../../../Firebase/firebase";
 import { v4 } from "uuid";
-import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
+import {
+  getDownloadURL,
+  listAll,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 import UserRatingInput from "./UserRatingInput";
 import UserRatingHead from "./UserRatingHead";
 import UserProfile from "./UserProfile";
+import { useUserContext } from "../../../contexts/UserContext";
+import { getComments, setComments } from "../../../Firebase/locationDetails";
+import dayjs from 'dayjs';
 
 const imagesRef = ref(storage, "/images");
 
@@ -16,16 +24,33 @@ function UserRating({ selectedLoc }) {
   const [lastTextData, setLastTextData] = useState([]);
   const [textValue, setTextValue] = useState("");
   const [evalViewLen, setEvalViewLen] = useState(2);
+  const { user } = useUserContext();
 
+  const userId = user.email.split("@")[0];
   useEffect(() => {
     getImage();
     async function getCommentsValue() {
-      const commentsObj = await getComments();
-      const commentArr = commentsObj.map((commentObj) => commentObj.comments);
-      setLastTextData(...commentArr);
+      const commentsObj = await getComments(selectedLoc.title);
+      console.log(commentsObj);
+      if (commentsObj.length <= 0)
+        return ;
+      console.log(commentsObj);
+      setLastTextData([...commentsObj]);
     }
+
     getCommentsValue();
-  }, []);
+  }, [selectedLoc.title]);
+
+  //   useEffect(() => {
+  //     if (!selectedLoc) return null;
+
+  //     // async function getLoadAddr() {
+  //     //   var geocoder = new kakao.maps.services.Geocoder();
+  //     //   searchAddrFromCoords
+  //     // }
+
+  //     // getLoadAddr();
+  //   }, [selectedLoc])
 
   useEffect(() => {
     if (firebaseImgRef.length === 0) return;
@@ -53,26 +78,76 @@ function UserRating({ selectedLoc }) {
     });
   }
 
+  const submitText = (imgUrl) => {
+    const date = dayjs(new Date()).format('YYYY.MM.DD');
+    const nowData = {
+      date: date, auth: userId, 'comments': textValue, 'imgUrl': imgUrl
+    }
+    const sendData = [...lastTextData, nowData];
+    setLastTextData(sendData);
+    setComments(selectedLoc.title, sendData);
+    setTextValue("");
+
+    // if (imgUrl) window.location.reload();
+  };
+
   const submitImg = () => {
     if (localFiles) {
+      if (!textValue)
+      {
+        alert('댓글을 입력해주세요!');
+        return ;
+      }
       const imageRef = ref(storage, `images/${localFiles.name + v4()}`);
-      uploadBytes(imageRef, localFiles).then(() => {
-        console.log("image upload!");
-        window.location.reload();
-      });
-      getImage();
+      const uploadTask = uploadBytesResumable(imageRef, localFiles);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // const progress =
+          //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          // console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              // console.log("Upload is paused");
+              break;
+            case "running":
+              // console.log("Upload is running");
+              break;
+            default:
+              break;
+          }
+        },
+        (error) => {
+          switch (error.code) {
+            case "storage/unauthorized":
+              break;
+            case "storage/canceled":
+              break;
+            case "storage/unknown":
+              break;
+            default:
+              break;
+          }
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            // console.log("File available at", downloadURL);
+            submitText(downloadURL);
+            getImage();
+            // console.log("image upload!");
+          });
+        }
+      );
+    } else if (textValue) {
+      submitText(null);
     }
-    if (textValue) {
-      const sendData = [...lastTextData, textValue];
-      setLastTextData(sendData);
-      setComments("heom", sendData);
-      setTextValue("");
+    else {
+      alert('댓글을 입력해주세요!');
     }
   };
 
   function ratingImg() {
     return evalImgsUrl.map((url, i) => {
-      console.log(url);
       if (i > 2) return <></>;
       return (
         <img
@@ -99,25 +174,30 @@ function UserRating({ selectedLoc }) {
         <table>
           <tbody>
             <tr>
-              <td className={tableTd}>주소</td>
-              <td className={tableTd}>서울 서초구 신반포로 222 (반포동)</td>
+              <td className={tableTd}>설치 주체</td>
+              <td className={tableTd}>{selectedLoc.circum["설치 주체"]}</td>
             </tr>
             <tr className={tableTr}>
               <td className={tableTd}>사용가능 시간</td>
-              <td className={tableTd}>7:00 - 19:00</td>
+              <td className={tableTd}>
+                {selectedLoc.circum["time"] ?? "7:00 - 19:00"}
+              </td>
             </tr>
             <tr className={tableTr}>
               <td className={tableTd}>주변 환경</td>
-              <td className={tableTd}>의자 없음</td>
+              <td className={tableTd}>
+                {selectedLoc.circum["circum"] ?? "등록된 정보가 없습니다"}
+              </td>
             </tr>
           </tbody>
         </table>
       </section>
       <div className={sectionDiv} />
       <section>
-        {lastTextData.map((data, i) => {
+        {lastTextData.length <= 0 &&  <UserProfile key='noData' data={{'date': '-', 'comments': '댓글이 없습니다.'}} userId={null} />}
+        {lastTextData?.map((data, i) => {
           if (i >= evalViewLen) return <></>;
-          return <UserProfile key={data} data={data} userInfo={null} />;
+          return <UserProfile key={data} data={data} userId={data.auth} />;
         })}
         {lastTextData.length > evalViewLen && (
           <button

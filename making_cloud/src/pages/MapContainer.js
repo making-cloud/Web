@@ -38,7 +38,7 @@ function MapContainer({ locaDatas, setSelectedLoc }) {
           </div>
           <button
             className={markTitle}
-            onClick={() => setLocation(locaData.title)}
+            onClick={() => setLocation(locaData)}
           >
             {locaData.title}
           </button>

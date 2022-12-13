@@ -1,11 +1,16 @@
-import React from 'react';
+import React from "react";
+import { css } from "@emotion/css";
 
-function SideLocationList(props) {
-    return (
-        <div>
-            안녕하세요
-        </div>
-    );
+function SideLocationList({ locaDatas, setSelectedLoc }) {
+
+  const locaDiv = locaDatas.map((data, i) => {
+    return <button key={data.title + i} className={paddingCss} onClick={() => setSelectedLoc(data.title)}>{data.title}</button>;
+  });
+  return <>{locaDiv}</>;
 }
 
 export default SideLocationList;
+
+const paddingCss = css`
+    padding: 10px;
+`;

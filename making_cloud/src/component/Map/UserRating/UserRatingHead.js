@@ -8,8 +8,8 @@ function UserRatingHead({ratingLen, imgLen, selectedLoc}) {
   return (
     <div className={userEvalHead}>
       <div>
-        <p className={headTitle}>{selectedLoc}</p>
-        <button
+        <p className={headTitle}>{selectedLoc.title}</p>
+        {/* <button
           className={likeButton}
           onClick={() => setIsLikedButton(!isLikedButton)}
         >
@@ -19,7 +19,7 @@ function UserRatingHead({ratingLen, imgLen, selectedLoc}) {
             <AiOutlineHeart size={24} color="pink" />
           )}
         <p className={likeNum}>+10</p>
-        </button>
+        </button> */}
       </div>
       <div className={sideButtonFont}>
         <button>방문자리뷰 {ratingLen}</button>

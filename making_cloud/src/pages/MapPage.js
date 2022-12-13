@@ -15,7 +15,7 @@ const MapPage = () => {
   return (
     <div>
       <PageWrapper>
-        <DetailsPage locaDatas={locaDatas} selectedLoc={selectedLoc} />
+        <DetailsPage locaDatas={locaDatas} selectedLoc={selectedLoc} setSelectedLoc={setSelectedLoc}/>
         <MapContainer locaDatas={locaDatas} setSelectedLoc={setSelectedLoc} />
       </PageWrapper>
     </div>
