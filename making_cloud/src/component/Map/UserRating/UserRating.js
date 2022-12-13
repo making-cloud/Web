@@ -9,7 +9,7 @@ import UserProfile from "./UserProfile";
 
 const imagesRef = ref(storage, "/images");
 
-function UserRating({nowPath}) {
+function UserRating({ selectedLoc }) {
   const [localFiles, setLocalFiles] = useState(null);
   const [firebaseImgRef, setFirebaseImgRef] = useState([]);
   const [evalImgsUrl, setEvalImgsUrl] = useState([]);
@@ -72,12 +72,13 @@ function UserRating({nowPath}) {
 
   function ratingImg() {
     return evalImgsUrl.map((url, i) => {
+      console.log(url);
       if (i > 2) return <></>;
       return (
         <img
           width={130}
           height={130}
-          key={url.value}
+          key={url.value + i}
           alt="eval img"
           src={url.value}
         />
@@ -88,31 +89,35 @@ function UserRating({nowPath}) {
   return (
     <div className={userEvalBox}>
       <div>{evalImgsUrl && evalImgsUrl.length > 0 && ratingImg()}</div>
-      <UserRatingHead ratingLen={lastTextData.length} imgLen={evalImgsUrl.length} nowPath={nowPath} />
+      <UserRatingHead
+        ratingLen={lastTextData.length}
+        imgLen={evalImgsUrl.length}
+        selectedLoc={selectedLoc}
+      />
       <div className={sectionDiv} />
       <section className={userEvalBody}>
         <table>
-          <tr>
-            <td className={tableTd}>주소</td>
-            <td className={tableTd}>서울 서초구 신반포로 222 (반포동)</td>
-          </tr>
-          <tr className={tableTr}>
-            <td className={tableTd}>사용가능 시간</td>
-            <td className={tableTd}>7:00 - 19:00</td>
-          </tr>
-          <tr className={tableTr}>
-            <td className={tableTd}>주변 환경</td>
-            <td className={tableTd}>의자 없음</td>
-          </tr>
+          <tbody>
+            <tr>
+              <td className={tableTd}>주소</td>
+              <td className={tableTd}>서울 서초구 신반포로 222 (반포동)</td>
+            </tr>
+            <tr className={tableTr}>
+              <td className={tableTd}>사용가능 시간</td>
+              <td className={tableTd}>7:00 - 19:00</td>
+            </tr>
+            <tr className={tableTr}>
+              <td className={tableTd}>주변 환경</td>
+              <td className={tableTd}>의자 없음</td>
+            </tr>
+          </tbody>
         </table>
       </section>
       <div className={sectionDiv} />
       <section>
         {lastTextData.map((data, i) => {
           if (i >= evalViewLen) return <></>;
-          return (
-            <UserProfile key={data} data={data} userInfo={null}/>
-          );
+          return <UserProfile key={data} data={data} userInfo={null} />;
         })}
         {lastTextData.length > evalViewLen && (
           <button
@@ -142,7 +147,6 @@ function UserRating({nowPath}) {
 
 const userEvalBox = css`
   display: flex;
-  width: 390px;
   flex-direction: column;
   justify-content: center;
 `;
@@ -158,7 +162,7 @@ const userEvalBody = css`
 
 const tableTr = css`
   width: 100;
-  border-top: 1px solid rgba(236,240,242, 1);
+  border-top: 1px solid rgba(236, 240, 242, 1);
 `;
 
 const tableTd = css`

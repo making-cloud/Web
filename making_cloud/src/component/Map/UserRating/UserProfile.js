@@ -18,9 +18,7 @@ function UserProfile({ userInfo, data }) {
           <div className={userCommentDate}>{userInfo.date}</div>
         </div>
       </div>
-      <div className={commentContents}>
-      {data}
-      </div>
+      <div className={commentContents}>{data}</div>
     </div>
   );
 }
@@ -30,7 +28,6 @@ export default UserProfile;
 const userProfileBox = css`
   display: flex;
   align-items: center;
-
   margin-bottom: 10px;
 `;
 
@@ -68,8 +65,8 @@ const userRatingText = css`
 `;
 
 const commentContents = css`
-    margin-top: 5px;
-    font-size: 15px;
-    line-height: 22px;
-    text-align: left;
+  margin-top: 5px;
+  font-size: 15px;
+  line-height: 22px;
+  text-align: left;
 `;

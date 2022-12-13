@@ -1,22 +1,21 @@
 import { css } from "@emotion/css";
-import { useState } from "react";
 import {
   Map,
   CustomOverlayMap,
-  CustomOverlay1Style,
 } from "react-kakao-maps-sdk";
 import { AiTwotoneCloud } from "react-icons/ai";
 
-function MapContainer({ locaDatas }) {
+function MapContainer({ locaDatas, setSelectedLoc }) {
+  function setLocation(title) {
+    setSelectedLoc(title);
+  }
+
   const EventMarkerContainer = ({ position, onClick, children }) => {
-    const [isOver, setIsOver] = useState(false);
 
     return (
       <CustomOverlayMap
         position={position} // 마커를 표시할 위치
         onClick={onClick}
-        onMouseOver={() => setIsOver(true)}
-        onMouseOut={() => setIsOver(false)}
         removable={false}
       >
         {children}
@@ -25,10 +24,9 @@ function MapContainer({ locaDatas }) {
   };
 
   const markers = locaDatas.map((locaData, index) => {
-    console.log(locaData);
     return (
       <EventMarkerContainer
-        key={locaData.title}
+        key={locaData.title + index}
         position={{ lat: locaData.latitude, lng: locaData.longtitude }}
       >
         <div className={markPoint} />
@@ -38,13 +36,12 @@ function MapContainer({ locaDatas }) {
               style={{ width: "100%", height: "100%", color: "white" }}
             />
           </div>
-          <a
-            className={marTitle}
-            style={{ color: "#000", width: "100%", height: "100%" }}
-            href={`http://localhost:3000/map/${locaData.title}`}
+          <button
+            className={markTitle}
+            onClick={() => setLocation(locaData.title)}
           >
             {locaData.title}
-          </a>
+          </button>
         </div>
         <div />
       </EventMarkerContainer>
@@ -117,13 +114,21 @@ const markImg = css`
   background: #0475f4;
 `;
 
-const marTitle = css`
+const markTitle = css`
+  width: "100%";
+  height: "100%";
   margin: -2px 0;
   padding: 2px 9px 2px 5px;
   font-size: 13px;
   line-height: 28px;
   letter-spacing: -0.4px;
   font-weight: 600;
+  color: black;
+
+  &:hover {
+    color: #0475f4;
+    font-weight: 800;
+  }
 `;
 
 export default MapContainer;

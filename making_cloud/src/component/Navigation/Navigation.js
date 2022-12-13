@@ -8,7 +8,7 @@ import {
 } from "react-icons/bs";
 import { RiSettings4Line, RiSettings4Fill } from "react-icons/ri";
 import { auth } from "../../Firebase/firebase";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useUserContext } from "../../contexts/UserContext";
 
 const NaviItems = ({ title, path, nowPath, logo, onClickLogo }) => {
@@ -19,7 +19,9 @@ const NaviItems = ({ title, path, nowPath, logo, onClickLogo }) => {
         to={path}
         className={cx(itemClickAbleArea, isClicked && selectedNav)}
       >
+        <div className={ path === '/settings' ? settingIconSize : iconSize}>
         {isClicked ? onClickLogo : logo}
+        </div>
         <div className={itemTitle}>{title}</div>
       </Link>
     </div>
@@ -27,7 +29,7 @@ const NaviItems = ({ title, path, nowPath, logo, onClickLogo }) => {
 };
 
 function Navigation() {
-  const { user, setUser } = useUserContext();
+  const { setUser } = useUserContext();
   const history = useHistory();
   const { pathname } = useLocation();
 
@@ -40,7 +42,7 @@ function Navigation() {
         history.push("/login");
       }
     });
-  }, [])
+  }, []);
 
   return (
     <div className={container}>
@@ -49,7 +51,6 @@ function Navigation() {
           구름 좌표
         </Link>
       </section>
-      <section></section>
       <section>
         <NaviItems
           title="지도"
@@ -69,8 +70,8 @@ function Navigation() {
           title="설정"
           path="/settings"
           nowPath={pathname}
-          logo={<RiSettings4Line />}
-          onClickLogo={<RiSettings4Fill />}
+          logo={<RiSettings4Line size={21} />}
+          onClickLogo={<RiSettings4Fill size={21}/>}
         />
       </section>
     </div>
@@ -91,9 +92,9 @@ const container = css`
 `;
 
 const service = css`
-  height: 73px;
-
-  padding: 25px 12px 16px;
+  height: 60px;
+  padding: 12px;
+  margin-bottom: 5px;
 `;
 
 const serciveTitle = css`
@@ -104,13 +105,14 @@ const serciveTitle = css`
 
   line-height: 29px;
 
-  font-family: "dongle";
-  font-size: 29px;
+  font-family: "SUIT Variable", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
   text-align: left;
 `;
 
 const items = css`
-  height: 48px;
+  height: 40px;
   margin: 8px 0;
 
   text-align: left;
@@ -124,7 +126,7 @@ const itemClickAbleArea = css`
   padding: 12px;
 
   text-align: left;
-  line-height: 24px;
+  line-height: 16px;
 
   font-size: 13px;
   font-weight: 400;
@@ -140,10 +142,35 @@ const itemClickAbleArea = css`
 
 const itemTitle = css`
   padding-left: 16px;
+  padding-top: 2px;
 `;
 
 const selectedNav = css`
   font-weight: 600;
+`;
+
+const iconSize = css`
+  width: 18px;
+  height: 100%;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  // hover 시 아이콘 크기 키우기 추가하기
+`;
+
+const settingIconSize = css`
+  width: 18px;
+  height: 20px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  // hover 시 아이콘 크기 키우기 추가하기
 `;
 
 export default Navigation;

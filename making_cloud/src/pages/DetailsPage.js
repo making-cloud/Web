@@ -1,15 +1,25 @@
-import { useParams } from "react-router-dom";
+import SideLocationList from "../component/Map/SideLocationList";
 import UserRating from "../component/Map/UserRating/UserRating";
-import PageWrapper from "../component/Wrapper/PageWrapper";
+import { css } from "@emotion/css";
 
-function DetailsPage() {
-  const {id: nowPath} = useParams();
-  console.log('nowPath');
+function DetailsPage({ locaDatas, selectedLoc }) {
   return (
-    <PageWrapper>
-      <UserRating nowPath={nowPath}/>
-    </PageWrapper>
+    <div className={container}>
+      {selectedLoc ? (
+        <UserRating selectedLoc={selectedLoc} />
+      ) : (
+        <SideLocationList locaDatas={locaDatas} />
+      )}
+    </div>
   );
 }
+
+const container = css`
+  position: absolute;
+  height: 100vh;
+  z-index: 3;
+  background: #fff;
+  width: 390px;
+`;
 
 export default DetailsPage;
