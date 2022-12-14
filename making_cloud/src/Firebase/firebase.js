@@ -28,10 +28,9 @@ export const storage = getStorage(app);
 export const storageRef = ref(storage);
 export const auth = getAuth(app);
 
-// export async function getUserInfo(userId)
-// {
-  
-// }
+export async function getUserInfo(userId)
+{
+}
 
 export default db
 

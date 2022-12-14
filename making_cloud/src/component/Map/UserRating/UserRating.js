@@ -30,9 +30,9 @@ function UserRating({ selectedLoc }) {
   useEffect(() => {
     getImage();
     async function getCommentsValue() {
+      setLastTextData([]);
       const commentsObj = await getComments(selectedLoc.title);
-      console.log(commentsObj);
-      if (commentsObj.length <= 0)
+      if (!commentsObj || commentsObj.length <= 0)
         return ;
       console.log(commentsObj);
       setLastTextData([...commentsObj]);
@@ -160,6 +160,8 @@ function UserRating({ selectedLoc }) {
       );
     });
   }
+
+  console.log(selectedLoc);
 
   return (
     <div className={userEvalBox}>

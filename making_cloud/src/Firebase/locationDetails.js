@@ -35,7 +35,6 @@ export async function getComments(locationTitle) {
     // Convert to comments object
     const comments = docSnap.data();
     // Use a comments instance method
-    console.log(comments.sendData);
     return comments.sendData;
   }
 return null

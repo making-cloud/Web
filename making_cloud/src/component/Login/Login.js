@@ -1,10 +1,11 @@
-import { css, cx } from "@emotion/css";
+import { css } from "@emotion/css";
 import { Link, useHistory } from "react-router-dom";
 import { auth } from "../../Firebase/firebase";
 import { useState } from "react";
 import { useUserContext } from "../../contexts/UserContext";
+import { deleteUser } from "firebase/auth";
 
-const Main = () => {
+const Login = () => {
   const { user, setUser } = useUserContext();
   const history = useHistory();
 
@@ -14,11 +15,21 @@ const Main = () => {
     const Email = user.email;
     nm = Email;
   }
-  const onLogOutClick = () => {
+  const logoutUser = () => {
     auth.signOut();
     setUser(null);
     history.push("/");
   };
+
+  const deleteUserF = () => {
+    const cUser = auth.currentUser;
+    console.log(auth);
+    deleteUser(cUser).then(() => {
+      alert("삭제되었습니다");
+      history.push("/");
+    })
+  };
+
   return !user ? (
     <>
       <p className="ToLogin">
@@ -31,16 +42,21 @@ const Main = () => {
   ) : (
     <>
       <header className="header">
-        <p className="User">
-          <div className="Users" />{nm}님
+        <div className="User">
+          <p className="Users">{nm}님</p>
           환영합니다.
-        </p>
+        </div>
 
-        <p className="LogOut" onClick={onLogOutClick}>
+        <button className="LogOut" onClick={logoutUser}>
           로그아웃
-        </p>
+        </button>
+        <br />
+        <button onClick={deleteUserF}>회원 탈퇴</button>
       </header>
     </>
   );
 };
-export default Main;
+
+const container = css``;
+
+export default Login;

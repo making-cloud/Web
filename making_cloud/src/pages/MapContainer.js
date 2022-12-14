@@ -23,10 +23,10 @@ function MapContainer({ locaDatas, setSelectedLoc }) {
     );
   };
 
-  const markers = locaDatas.map((locaData, index) => {
+  const markers = locaDatas.map((locaData, ) => {
     return (
       <EventMarkerContainer
-        key={locaData.title + index}
+        key={locaData.title}
         position={{ lat: locaData.latitude, lng: locaData.longtitude }}
       >
         <div className={markPoint} />

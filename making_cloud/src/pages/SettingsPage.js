@@ -1,8 +1,8 @@
 import React from "react";
 import PageWrapper from "../component/Wrapper/PageWrapper";
-import Main from "../component/Login/hello";
+import Login from "../component/Login/Login";
 function SettingsPage(props) {
-  return <PageWrapper><Main /></PageWrapper>;
+  return <PageWrapper><Login /></PageWrapper>;
 }
 
 export default SettingsPage;
