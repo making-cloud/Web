@@ -8,7 +8,6 @@ function DetailsPage({ locaDatas, selectedLoc, setSelectedLoc }) {
 
   console.log(isSelected);
   useEffect(() => {
-    console.log(setIsSelcted);
     if (selectedLoc) setIsSelcted(true);
   }, [selectedLoc]);
 

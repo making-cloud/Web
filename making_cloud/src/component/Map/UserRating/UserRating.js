@@ -34,7 +34,6 @@ function UserRating({ selectedLoc }) {
       const commentsObj = await getComments(selectedLoc.title);
       if (!commentsObj || commentsObj.length <= 0)
         return ;
-      console.log(commentsObj);
       setLastTextData([...commentsObj]);
     }
 
@@ -160,8 +159,6 @@ function UserRating({ selectedLoc }) {
       );
     });
   }
-
-  console.log(selectedLoc);
 
   return (
     <div className={userEvalBox}>

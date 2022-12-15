@@ -42,5 +42,4 @@ return null
 
 export async function setComments(locationTitle, sendData) {
   const comments = await setDoc(doc(db, "comments", locationTitle), {sendData});
-  console.log(comments);
 }

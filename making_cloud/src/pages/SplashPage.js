@@ -6,11 +6,8 @@ function SplashPage(props) {
   const history = useHistory();
 
   const {user} = useUserContext();
-  console.log('spl');
-  console.log(user);
   if (!user)
   {
-    console.log('sss');
     history.push("/login");
   }
 

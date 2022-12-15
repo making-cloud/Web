@@ -23,6 +23,7 @@ function LoginPage() {
   const history = useHistory();
 
   auth.onAuthStateChanged((currentuser) => {
+    console.log(currentuser);
     if (currentuser) {
       setUser(currentuser);
       history.push("/map");
@@ -53,7 +54,6 @@ function LoginPage() {
     } else if (name === "password") {
       setPassword(value);
     }
-    console.log(value);
   }
   const changePasswordUsingEmail = async () => {
     var email = prompt("이메일을 입력해 주세요.");
@@ -86,7 +86,6 @@ function LoginPage() {
           alert(error);
         }
       }
-      console.log(data);
     } catch (error) {
       console.log(error);
       setError(error.message);
