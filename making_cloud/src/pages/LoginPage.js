@@ -1,12 +1,12 @@
-import { useHistory, useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithRedirect,
   sendPasswordResetEmail,
   getRedirectResult,
+  signInWithRedirect,
 } from "firebase/auth";
 import { auth } from "../Firebase/firebase";
 import { useEffect, useState } from "react";
@@ -17,31 +17,27 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newAccount, setNewAccount] = useState(true);
-  const [error, setError] = useState("");
-
-  const { user, setUser } = useUserContext();
+  const { setUser } = useUserContext();
   const history = useHistory();
 
-  auth.onAuthStateChanged((currentuser) => {
-    console.log(currentuser);
-    if (currentuser) {
-      setUser(currentuser);
-      history.push("/map");
-    } else {
-      setUser(null);
-    }
-  });
+  useEffect(() => {
+    auth.onAuthStateChanged((currentuser) => {
+      console.log(currentuser);
+      if (currentuser) {
+        setUser(currentuser);
+        history.push("/map");
+      } else {
+        setUser(null);
+      }
+    });
+  }, [auth]);
 
-  const handleGoogleLogin = async (event) => {
+  const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
     await signInWithRedirect(auth, provider);
   };
 
-  const handleLogin = (e) => {
-    const {
-      target: { name },
-    } = e;
-
+  const handleLogin = () => {
     handleGoogleLogin();
   };
 
@@ -55,6 +51,7 @@ function LoginPage() {
       setPassword(value);
     }
   }
+
   const changePasswordUsingEmail = async () => {
     var email = prompt("이메일을 입력해 주세요.");
     try {
@@ -88,70 +85,60 @@ function LoginPage() {
       }
     } catch (error) {
       console.log(error);
-      setError(error.message);
     }
   };
 
   const toggleAccount = () => setNewAccount((prev) => !prev);
-  const State = () => {
-    return user ? (
-      <Link to="/">메인화면으로 돌아가기</Link>
-    ) : (
-      <>
-        <form onSubmit={onSubmit}>
-          <h3>{!newAccount ? "회원가입" : "로그인"}</h3>
-          <input
-            className="Login_box"
-            label="Email Address"
-            name="email"
-            type="email"
-            required
-            value={email}
-            onChange={onChange}
-            placeholder="이메일"
-          ></input>
-          <input
-            className="passWord_box"
-            label="password"
-            name="password"
-            type="password"
-            required
-            value={password}
-            onChange={onChange}
-            placeholder="비밀번호"
-          ></input>
-          <button
-            className="submit_button"
-            type="submit"
-            value={!newAccount ? "Create Account" : "Sign In"}
-          >
-            {!newAccount ? "Create Account" : "Sign in"}
-          </button>
-          <div style={{ justifyContent: "space-between" }}>
-            <div style={{ textAlign: "start" }}>
-              <span onClick={toggleAccount} className="gg">
-                {!newAccount ? "Sign in" : "Create Account"}
-              </span>
-              <span className="di">|</span>
-              <span className="findPassword" onClick={changePasswordUsingEmail}>
-                비밀번호 찾기
-              </span>
-            </div>
+
+  return (
+    <>
+      <form onSubmit={onSubmit}>
+        <h3>{!newAccount ? "회원가입" : "로그인"}</h3>
+        <input
+          className="Login_box"
+          label="Email Address"
+          name="email"
+          type="email"
+          required
+          value={email}
+          onChange={onChange}
+          placeholder="이메일"
+        ></input>
+        <input
+          className="passWord_box"
+          label="password"
+          name="password"
+          type="password"
+          required
+          value={password}
+          onChange={onChange}
+          placeholder="비밀번호"
+        ></input>
+        <button
+          className="submit_button"
+          type="submit"
+          value={!newAccount ? "Create Account" : "Sign In"}
+        >
+          {!newAccount ? "Create Account" : "Sign in"}
+        </button>
+        <div style={{ justifyContent: "space-between" }}>
+          <div style={{ textAlign: "start" }}>
+            <span onClick={toggleAccount} className="gg">
+              {!newAccount ? "Sign in" : "Create Account"}
+            </span>
+            <span className="di">|</span>
+            <span className="findPassword" onClick={changePasswordUsingEmail}>
+              비밀번호 찾기
+            </span>
           </div>
+        </div>
 
-          <p className="Google_login" name="Google" onClick={handleLogin}>
-            continue with Google
-          </p>
-          <br></br>
-
-          <Link to="/" className="mainpage">
-            메인화면으로 돌아가기
-          </Link>
-        </form>
-      </>
-    );
-  };
-  return State();
+        <p className="Google_login" name="Google" onClick={handleLogin}>
+          continue with Google
+        </p>
+      </form>
+    </>
+  );
 }
 
 export default LoginPage;

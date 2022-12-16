@@ -1,11 +1,10 @@
-import { css, keyframes } from "@emotion/css";
+import { css } from "@emotion/css";
 import { Link, useHistory } from "react-router-dom";
 import { auth } from "../../Firebase/firebase";
-import { useState } from "react";
 import { useUserContext } from "../../contexts/UserContext";
 import { deleteUser } from "firebase/auth";
 
-const Login = () => {
+const Setting = () => {
   const { user, setUser } = useUserContext();
   const history = useHistory();
 
@@ -23,10 +22,14 @@ const Login = () => {
 
   const deleteUserF = () => {
     const cUser = auth.currentUser;
-    deleteUser(cUser).then(() => {
-      alert("삭제되었습니다");
-      history.push("/");
-    });
+    deleteUser(cUser)
+      .then(() => {
+        alert("삭제되었습니다");
+        history.push("/");
+      })
+      .catch((e) => {
+        alert(e);
+      });
   };
 
   return !user ? (
@@ -69,7 +72,7 @@ const Login = () => {
           금연을 실천해야하는 104가지 이유
         </a>
       </section>
-      <section className={userDelete}>
+      <section className={userDeleteBox}>
         <button onClick={deleteUserF}>회원 탈퇴</button>
       </section>
     </div>
@@ -138,6 +141,8 @@ const linkBox = css`
   }
 `;
 
-const userDelete = css``;
+const userDeleteBox = css`
+  cursor: pointer;
+`;
 
-export default Login;
+export default Setting;
