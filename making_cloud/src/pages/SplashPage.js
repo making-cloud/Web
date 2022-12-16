@@ -7,9 +7,10 @@ function SplashPage(props) {
 
   const {user} = useUserContext();
   if (!user)
-  {
     history.push("/login");
-  }
+  else
+    history.push("/map");
+
 
 
   return (
